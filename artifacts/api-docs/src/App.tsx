@@ -8,6 +8,7 @@ import PublicDocs from "./pages/PublicDocs";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminGroups from "./pages/AdminGroups";
 import AdminLogin from "./pages/AdminLogin";
+import AdminApiKeys from "./pages/AdminApiKeys";
 import { Layout } from "./components/Layout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { CommandPalette, useCommandPalette } from "./components/CommandPalette";
@@ -21,22 +22,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={PublicDocs} />
-      <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin">
-        {() => <ProtectedRoute component={AdminDashboard} />}
-      </Route>
-      <Route path="/admin/groups">
-        {() => <ProtectedRoute component={AdminGroups} />}
-      </Route>
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
 
 function App() {
   const { open, setOpen } = useCommandPalette();
@@ -58,6 +43,9 @@ function App() {
                       </Route>
                       <Route path="/admin/groups">
                         {() => <ProtectedRoute component={AdminGroups} />}
+                      </Route>
+                      <Route path="/admin/api-keys">
+                        {() => <ProtectedRoute component={AdminApiKeys} />}
                       </Route>
                       <Route component={NotFound} />
                     </Switch>
