@@ -43,6 +43,11 @@ export function EndpointCard({ endpoint }: { endpoint: Endpoint }) {
           <span className="text-muted-foreground text-sm hidden md:inline-block truncate max-w-md">{endpoint.summary}</span>
         </div>
         <div className="flex items-center gap-2">
+          {endpoint.version && (
+            <Badge variant="outline" className="font-mono text-[10px] text-muted-foreground border-border hidden sm:inline-flex">
+              {endpoint.version.toUpperCase()}
+            </Badge>
+          )}
           {endpoint.status === 'deprecated' && <Badge variant="destructive" className="text-xs scale-90">Deprecated</Badge>}
           {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
         </div>

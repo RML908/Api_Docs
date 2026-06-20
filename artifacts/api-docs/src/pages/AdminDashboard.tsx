@@ -32,6 +32,7 @@ const endpointFormSchema = z.object({
   summary: z.string().min(1, "Summary is required"),
   description: z.string().optional(),
   status: z.enum(STATUSES),
+  version: z.string().min(1, "Version is required"),
   params: z.string().optional(),
   responseExample: z.string().optional(),
   responseStatus: z.coerce.number().optional(),
@@ -94,6 +95,7 @@ function EndpointFormDialog({
       summary: endpoint?.summary ?? "",
       description: endpoint?.description ?? "",
       status: (endpoint?.status as typeof STATUSES[number]) ?? "draft",
+      version: endpoint?.version ?? "v1",
       params: endpoint?.params ?? "",
       responseExample: endpoint?.responseExample ?? "",
       responseStatus: endpoint?.responseStatus ?? 200,
@@ -221,7 +223,7 @@ function EndpointFormDialog({
               </FormItem>
             )} />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <FormField control={form.control} name="status" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
@@ -234,6 +236,25 @@ function EndpointFormDialog({
                     <SelectContent>
                       {STATUSES.map((s) => (
                         <SelectItem key={s} value={s} className="capitalize">{s.charAt(0).toUpperCase() + s.slice(1)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={form.control} name="version" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Version</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger data-testid="select-version">
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {["v1", "v2", "v3"].map((v) => (
+                        <SelectItem key={v} value={v}>{v.toUpperCase()}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

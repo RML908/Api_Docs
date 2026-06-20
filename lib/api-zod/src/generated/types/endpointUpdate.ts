@@ -17,6 +17,8 @@ export interface EndpointUpdate {
   summary?: string;
   description?: string;
   status?: EndpointUpdateStatus;
+  /** API version tag e.g. v1, v2 */
+  version?: string;
   params?: string;
   responseExample?: string;
   responseStatus?: number;

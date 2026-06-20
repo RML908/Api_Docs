@@ -72,6 +72,8 @@ export interface Endpoint {
   /** @nullable */
   description?: string | null;
   status: EndpointStatus;
+  /** API version tag e.g. v1, v2 */
+  version?: string;
   /**
      * JSON string of parameter objects
      * @nullable
@@ -118,6 +120,8 @@ export interface EndpointInput {
   summary: string;
   description?: string;
   status?: EndpointInputStatus;
+  /** API version tag e.g. v1, v2 */
+  version?: string;
   /** JSON string of parameter objects */
   params?: string;
   responseExample?: string;
@@ -153,6 +157,8 @@ export interface EndpointUpdate {
   summary?: string;
   description?: string;
   status?: EndpointUpdateStatus;
+  /** API version tag e.g. v1, v2 */
+  version?: string;
   params?: string;
   responseExample?: string;
   responseStatus?: number;
@@ -170,6 +176,7 @@ export type ListEndpointsParams = {
 groupId?: number;
 status?: ListEndpointsStatus;
 q?: string;
+version?: string;
 };
 
 export type ListEndpointsStatus = typeof ListEndpointsStatus[keyof typeof ListEndpointsStatus];

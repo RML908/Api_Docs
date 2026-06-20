@@ -93,7 +93,8 @@ export const DeleteGroupResponse = zod.object({
 export const ListEndpointsQueryParams = zod.object({
   "groupId": zod.coerce.number().optional(),
   "status": zod.enum(['published', 'draft', 'deprecated']).optional(),
-  "q": zod.coerce.string().optional()
+  "q": zod.coerce.string().optional(),
+  "version": zod.coerce.string().optional()
 })
 
 export const ListEndpointsResponseItem = zod.object({
@@ -104,6 +105,7 @@ export const ListEndpointsResponseItem = zod.object({
   "summary": zod.string(),
   "description": zod.string().nullish(),
   "status": zod.enum(['published', 'draft', 'deprecated']),
+  "version": zod.string().optional().describe('API version tag e.g. v1, v2'),
   "params": zod.string().nullish().describe('JSON string of parameter objects'),
   "responseExample": zod.string().nullish().describe('JSON string of example response'),
   "responseStatus": zod.number().nullish(),
@@ -128,6 +130,7 @@ export const CreateEndpointBody = zod.object({
   "summary": zod.string().min(1),
   "description": zod.string().optional(),
   "status": zod.enum(['published', 'draft', 'deprecated']).optional(),
+  "version": zod.string().optional().describe('API version tag e.g. v1, v2'),
   "params": zod.string().optional().describe('JSON string of parameter objects'),
   "responseExample": zod.string().optional(),
   "responseStatus": zod.number().optional()
@@ -149,6 +152,7 @@ export const GetEndpointResponse = zod.object({
   "summary": zod.string(),
   "description": zod.string().nullish(),
   "status": zod.enum(['published', 'draft', 'deprecated']),
+  "version": zod.string().optional().describe('API version tag e.g. v1, v2'),
   "params": zod.string().nullish().describe('JSON string of parameter objects'),
   "responseExample": zod.string().nullish().describe('JSON string of example response'),
   "responseStatus": zod.number().nullish(),
@@ -176,6 +180,7 @@ export const UpdateEndpointBody = zod.object({
   "summary": zod.string().min(1).optional(),
   "description": zod.string().optional(),
   "status": zod.enum(['published', 'draft', 'deprecated']).optional(),
+  "version": zod.string().optional().describe('API version tag e.g. v1, v2'),
   "params": zod.string().optional(),
   "responseExample": zod.string().optional(),
   "responseStatus": zod.number().optional()
@@ -189,6 +194,7 @@ export const UpdateEndpointResponse = zod.object({
   "summary": zod.string(),
   "description": zod.string().nullish(),
   "status": zod.enum(['published', 'draft', 'deprecated']),
+  "version": zod.string().optional().describe('API version tag e.g. v1, v2'),
   "params": zod.string().nullish().describe('JSON string of parameter objects'),
   "responseExample": zod.string().nullish().describe('JSON string of example response'),
   "responseStatus": zod.number().nullish(),

@@ -142,6 +142,11 @@ paths:
           required: false
           schema:
             type: string
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: List of endpoints
@@ -349,6 +354,9 @@ components:
         status:
           type: string
           enum: [published, draft, deprecated]
+        version:
+          type: string
+          description: API version tag e.g. v1, v2
         params:
           type: ["string", "null"]
           description: JSON string of parameter objects
@@ -386,6 +394,9 @@ components:
         status:
           type: string
           enum: [published, draft, deprecated]
+        version:
+          type: string
+          description: API version tag e.g. v1, v2
         params:
           type: string
           description: JSON string of parameter objects
@@ -413,6 +424,9 @@ components:
         status:
           type: string
           enum: [published, draft, deprecated]
+        version:
+          type: string
+          description: API version tag e.g. v1, v2
         params:
           type: string
         responseExample:

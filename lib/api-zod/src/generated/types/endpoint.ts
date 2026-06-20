@@ -17,6 +17,8 @@ export interface Endpoint {
   /** @nullable */
   description?: string | null;
   status: EndpointStatus;
+  /** API version tag e.g. v1, v2 */
+  version?: string;
   /**
      * JSON string of parameter objects
      * @nullable

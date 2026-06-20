@@ -20,7 +20,7 @@ router.get("/endpoints", async (req, res): Promise<void> => {
     return;
   }
 
-  const { groupId, status, q } = query.data;
+  const { groupId, status, q, version } = query.data;
 
   const filters: SQL[] = [];
   if (groupId !== undefined) {
@@ -28,6 +28,9 @@ router.get("/endpoints", async (req, res): Promise<void> => {
   }
   if (status) {
     filters.push(eq(endpointsTable.status, status));
+  }
+  if (version) {
+    filters.push(eq(endpointsTable.version, version));
   }
   if (q) {
     filters.push(ilike(endpointsTable.summary, `%${q}%`));

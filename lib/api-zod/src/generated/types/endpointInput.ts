@@ -17,6 +17,8 @@ export interface EndpointInput {
   summary: string;
   description?: string;
   status?: EndpointInputStatus;
+  /** API version tag e.g. v1, v2 */
+  version?: string;
   /** JSON string of parameter objects */
   params?: string;
   responseExample?: string;

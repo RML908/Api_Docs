@@ -5,7 +5,7 @@ generated = []
 id = "B9_XAUn_cdonMdo-1-tUI"
 uri = "file://api-portal.tar.gz"
 type = "unspecified"
-title = "API Portal — Full Project (tar.gz)"
+title = "Full Project Archive (source + PostgreSQL DB backup)"
 
 [[outputs]]
 id = "eWUZ0QqSeQN3WrzuAgztA"

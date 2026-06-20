@@ -11,4 +11,5 @@ export type ListEndpointsParams = {
 groupId?: number;
 status?: ListEndpointsStatus;
 q?: string;
+version?: string;
 };
