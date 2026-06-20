@@ -9,6 +9,7 @@ import {
   UpdateEndpointBody,
   DeleteEndpointParams,
 } from "@workspace/api-zod";
+import { requireAuth } from "../middleware/requireAuth";
 
 const router: IRouter = Router();
 
@@ -41,7 +42,7 @@ router.get("/endpoints", async (req, res): Promise<void> => {
   res.json(rows);
 });
 
-router.post("/endpoints", async (req, res): Promise<void> => {
+router.post("/endpoints", requireAuth, async (req, res): Promise<void> => {
   const parsed = CreateEndpointBody.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.message });
@@ -84,7 +85,7 @@ router.get("/endpoints/:id", async (req, res): Promise<void> => {
   res.json(endpoint);
 });
 
-router.patch("/endpoints/:id", async (req, res): Promise<void> => {
+router.patch("/endpoints/:id", requireAuth, async (req, res): Promise<void> => {
   const params = UpdateEndpointParams.safeParse(req.params);
   if (!params.success) {
     res.status(400).json({ error: params.error.message });
@@ -111,7 +112,7 @@ router.patch("/endpoints/:id", async (req, res): Promise<void> => {
   res.json(endpoint);
 });
 
-router.delete("/endpoints/:id", async (req, res): Promise<void> => {
+router.delete("/endpoints/:id", requireAuth, async (req, res): Promise<void> => {
   const params = DeleteEndpointParams.safeParse(req.params);
   if (!params.success) {
     res.status(400).json({ error: params.error.message });

@@ -7,8 +7,11 @@ import NotFound from "@/pages/not-found";
 import PublicDocs from "./pages/PublicDocs";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminGroups from "./pages/AdminGroups";
+import AdminLogin from "./pages/AdminLogin";
 import { Layout } from "./components/Layout";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { CommandPalette, useCommandPalette } from "./components/CommandPalette";
+import { AuthProvider } from "./hooks/use-auth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,8 +26,13 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={PublicDocs} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/groups" component={AdminGroups} />
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin">
+        {() => <ProtectedRoute component={AdminDashboard} />}
+      </Route>
+      <Route path="/admin/groups">
+        {() => <ProtectedRoute component={AdminGroups} />}
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );
@@ -35,15 +43,33 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Layout onOpenCommandPalette={() => setOpen(true)}>
-            <Router />
-          </Layout>
-          <CommandPalette open={open} onClose={() => setOpen(false)} />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+            <Switch>
+              <Route path="/admin/login" component={AdminLogin} />
+              <Route>
+                {() => (
+                  <Layout onOpenCommandPalette={() => setOpen(true)}>
+                    <Switch>
+                      <Route path="/" component={PublicDocs} />
+                      <Route path="/admin">
+                        {() => <ProtectedRoute component={AdminDashboard} />}
+                      </Route>
+                      <Route path="/admin/groups">
+                        {() => <ProtectedRoute component={AdminGroups} />}
+                      </Route>
+                      <Route component={NotFound} />
+                    </Switch>
+                  </Layout>
+                )}
+              </Route>
+            </Switch>
+            <CommandPalette open={open} onClose={() => setOpen(false)} />
+          </WouterRouter>
+          <Toaster />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

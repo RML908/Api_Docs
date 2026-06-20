@@ -7,6 +7,7 @@ import {
   UpdateGroupBody,
   DeleteGroupParams,
 } from "@workspace/api-zod";
+import { requireAuth } from "../middleware/requireAuth";
 
 const router: IRouter = Router();
 
@@ -18,7 +19,7 @@ router.get("/groups", async (req, res): Promise<void> => {
   res.json(groups);
 });
 
-router.post("/groups", async (req, res): Promise<void> => {
+router.post("/groups", requireAuth, async (req, res): Promise<void> => {
   const parsed = CreateGroupBody.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.message });
@@ -41,7 +42,7 @@ router.post("/groups", async (req, res): Promise<void> => {
   res.status(201).json(group);
 });
 
-router.patch("/groups/:id", async (req, res): Promise<void> => {
+router.patch("/groups/:id", requireAuth, async (req, res): Promise<void> => {
   const params = UpdateGroupParams.safeParse(req.params);
   if (!params.success) {
     res.status(400).json({ error: params.error.message });
@@ -68,7 +69,7 @@ router.patch("/groups/:id", async (req, res): Promise<void> => {
   res.json(group);
 });
 
-router.delete("/groups/:id", async (req, res): Promise<void> => {
+router.delete("/groups/:id", requireAuth, async (req, res): Promise<void> => {
   const params = DeleteGroupParams.safeParse(req.params);
   if (!params.success) {
     res.status(400).json({ error: params.error.message });
