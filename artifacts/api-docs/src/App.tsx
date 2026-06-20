@@ -8,6 +8,7 @@ import PublicDocs from "./pages/PublicDocs";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminGroups from "./pages/AdminGroups";
 import { Layout } from "./components/Layout";
+import { CommandPalette, useCommandPalette } from "./components/CommandPalette";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,13 +31,16 @@ function Router() {
 }
 
 function App() {
+  const { open, setOpen } = useCommandPalette();
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Layout>
+          <Layout onOpenCommandPalette={() => setOpen(true)}>
             <Router />
           </Layout>
+          <CommandPalette open={open} onClose={() => setOpen(false)} />
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

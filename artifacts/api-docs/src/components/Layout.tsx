@@ -1,11 +1,16 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Book, Settings, Layers, Menu, ServerCrash } from "lucide-react";
+import { Book, Settings, Layers, Menu, ServerCrash, Search } from "lucide-react";
 import { useHealthCheck } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 
-export function Layout({ children }: { children: ReactNode }) {
+interface LayoutProps {
+  children: ReactNode;
+  onOpenCommandPalette?: () => void;
+}
+
+export function Layout({ children, onOpenCommandPalette }: LayoutProps) {
   const [location] = useLocation();
   const { data: health } = useHealthCheck();
 
@@ -25,7 +30,23 @@ export function Layout({ children }: { children: ReactNode }) {
             <span>API_PORTAL</span>
           </div>
         </div>
-        <nav className="flex-1 space-y-1 p-2">
+
+        {/* ⌘K search trigger */}
+        <div className="px-2 pt-2">
+          <button
+            onClick={onOpenCommandPalette}
+            className="w-full flex items-center gap-2 rounded-md border border-border bg-background/60 px-3 py-2 text-xs text-muted-foreground hover:bg-accent/60 transition-colors"
+            data-testid="button-open-command-palette"
+          >
+            <Search className="h-3.5 w-3.5 flex-shrink-0" />
+            <span className="flex-1 text-left">Search...</span>
+            <kbd className="hidden md:flex items-center gap-0.5 rounded border border-border px-1 py-0.5 text-[9px] font-mono">
+              ⌘K
+            </kbd>
+          </button>
+        </div>
+
+        <nav className="flex-1 space-y-1 p-2 pt-2">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className={cn(
               "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
@@ -51,7 +72,16 @@ export function Layout({ children }: { children: ReactNode }) {
           <Button variant="ghost" size="icon" className="md:hidden">
             <Menu className="h-5 w-5" />
           </Button>
-          <div className="font-mono font-bold tracking-tight text-sm">API_PORTAL</div>
+          <div className="font-mono font-bold tracking-tight text-sm flex-1">API_PORTAL</div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onOpenCommandPalette}
+            className="h-8 w-8"
+            data-testid="button-mobile-search"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
         </header>
         <div className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
           {children}
