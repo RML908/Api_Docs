@@ -5,6 +5,7 @@ import endpointsRouter from "./endpoints";
 import statsRouter from "./stats";
 import authRouter from "./auth";
 import apiKeysRouter from "./api-keys";
+import changelogsRouter from "./changelogs";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use(groupsRouter);
 router.use(endpointsRouter);
 router.use(statsRouter);
 router.use(apiKeysRouter);
+router.use(changelogsRouter);
 
 export default router;

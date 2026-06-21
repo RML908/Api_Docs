@@ -251,6 +251,98 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /changelogs:
+    get:
+      operationId: listChangelogs
+      tags: [changelogs]
+      summary: List changelog entries
+      parameters:
+        - name: version
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of changelogs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Changelog"
+    post:
+      operationId: createChangelog
+      tags: [changelogs]
+      summary: Create a changelog entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangelogInput"
+      responses:
+        "201":
+          description: Created changelog
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Changelog"
+
+  /changelogs/{id}:
+    patch:
+      operationId: updateChangelog
+      tags: [changelogs]
+      summary: Update a changelog entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangelogInput"
+      responses:
+        "200":
+          description: Updated changelog
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Changelog"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteChangelog
+      tags: [changelogs]
+      summary: Delete a changelog entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /stats:
     get:
       operationId: getStats
@@ -433,6 +525,45 @@ components:
           type: string
         responseStatus:
           type: integer
+
+    Changelog:
+      type: object
+      required: [id, version, title, content, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        version:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        publishedAt:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ChangelogInput:
+      type: object
+      required: [version, title, content]
+      properties:
+        version:
+          type: string
+          minLength: 1
+        title:
+          type: string
+          minLength: 1
+        content:
+          type: string
+          minLength: 1
+        publishedAt:
+          type: ["string", "null"]
+          format: date-time
 
     Stats:
       type: object

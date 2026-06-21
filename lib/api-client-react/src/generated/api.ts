@@ -20,6 +20,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  Changelog,
+  ChangelogInput,
   Endpoint,
   EndpointInput,
   EndpointUpdate,
@@ -28,6 +30,7 @@ import type {
   GroupInput,
   GroupUpdate,
   HealthStatus,
+  ListChangelogsParams,
   ListEndpointsParams,
   MessageResponse,
   Stats
@@ -787,6 +790,303 @@ export const useDeleteEndpoint = <TError = ErrorType<ErrorResponse>,
         TContext
       > => {
       return useMutation(getDeleteEndpointMutationOptions(options));
+    }
+
+export const getListChangelogsUrl = (params?: ListChangelogsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/changelogs?${stringifiedParams}` : `/api/changelogs`
+}
+
+/**
+ * @summary List changelog entries
+ */
+export const listChangelogs = async (params?: ListChangelogsParams, options?: RequestInit): Promise<Changelog[]> => {
+
+  return customFetch<Changelog[]>(getListChangelogsUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListChangelogsQueryKey = (params?: ListChangelogsParams,) => {
+    return [
+    `/api/changelogs`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListChangelogsQueryOptions = <TData = Awaited<ReturnType<typeof listChangelogs>>, TError = ErrorType<unknown>>(params?: ListChangelogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listChangelogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListChangelogsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listChangelogs>>> = ({ signal }) => listChangelogs(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listChangelogs>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListChangelogsQueryResult = NonNullable<Awaited<ReturnType<typeof listChangelogs>>>
+export type ListChangelogsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List changelog entries
+ */
+
+export function useListChangelogs<TData = Awaited<ReturnType<typeof listChangelogs>>, TError = ErrorType<unknown>>(
+ params?: ListChangelogsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listChangelogs>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListChangelogsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getCreateChangelogUrl = () => {
+
+
+
+
+  return `/api/changelogs`
+}
+
+/**
+ * @summary Create a changelog entry
+ */
+export const createChangelog = async (changelogInput: ChangelogInput, options?: RequestInit): Promise<Changelog> => {
+
+  return customFetch<Changelog>(getCreateChangelogUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      changelogInput,)
+  }
+);}
+
+
+
+
+export const getCreateChangelogMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createChangelog>>, TError,{data: BodyType<ChangelogInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createChangelog>>, TError,{data: BodyType<ChangelogInput>}, TContext> => {
+
+const mutationKey = ['createChangelog'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createChangelog>>, {data: BodyType<ChangelogInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createChangelog(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateChangelogMutationResult = NonNullable<Awaited<ReturnType<typeof createChangelog>>>
+    export type CreateChangelogMutationBody = BodyType<ChangelogInput>
+    export type CreateChangelogMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a changelog entry
+ */
+export const useCreateChangelog = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createChangelog>>, TError,{data: BodyType<ChangelogInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createChangelog>>,
+        TError,
+        {data: BodyType<ChangelogInput>},
+        TContext
+      > => {
+      return useMutation(getCreateChangelogMutationOptions(options));
+    }
+
+export const getUpdateChangelogUrl = (id: number,) => {
+
+
+
+
+  return `/api/changelogs/${id}`
+}
+
+/**
+ * @summary Update a changelog entry
+ */
+export const updateChangelog = async (id: number,
+    changelogInput: ChangelogInput, options?: RequestInit): Promise<Changelog> => {
+
+  return customFetch<Changelog>(getUpdateChangelogUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      changelogInput,)
+  }
+);}
+
+
+
+
+export const getUpdateChangelogMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateChangelog>>, TError,{id: number;data: BodyType<ChangelogInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateChangelog>>, TError,{id: number;data: BodyType<ChangelogInput>}, TContext> => {
+
+const mutationKey = ['updateChangelog'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateChangelog>>, {id: number;data: BodyType<ChangelogInput>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateChangelog(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateChangelogMutationResult = NonNullable<Awaited<ReturnType<typeof updateChangelog>>>
+    export type UpdateChangelogMutationBody = BodyType<ChangelogInput>
+    export type UpdateChangelogMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Update a changelog entry
+ */
+export const useUpdateChangelog = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateChangelog>>, TError,{id: number;data: BodyType<ChangelogInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateChangelog>>,
+        TError,
+        {id: number;data: BodyType<ChangelogInput>},
+        TContext
+      > => {
+      return useMutation(getUpdateChangelogMutationOptions(options));
+    }
+
+export const getDeleteChangelogUrl = (id: number,) => {
+
+
+
+
+  return `/api/changelogs/${id}`
+}
+
+/**
+ * @summary Delete a changelog entry
+ */
+export const deleteChangelog = async (id: number, options?: RequestInit): Promise<MessageResponse> => {
+
+  return customFetch<MessageResponse>(getDeleteChangelogUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteChangelogMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteChangelog>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteChangelog>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteChangelog'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteChangelog>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteChangelog(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteChangelogMutationResult = NonNullable<Awaited<ReturnType<typeof deleteChangelog>>>
+
+    export type DeleteChangelogMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Delete a changelog entry
+ */
+export const useDeleteChangelog = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteChangelog>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteChangelog>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteChangelogMutationOptions(options));
     }
 
 export const getGetStatsUrl = () => {

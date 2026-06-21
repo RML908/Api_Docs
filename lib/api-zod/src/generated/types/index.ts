@@ -6,6 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './changelog';
+export * from './changelogInput';
 export * from './endpoint';
 export * from './endpointInput';
 export * from './endpointInputMethod';
@@ -20,6 +22,7 @@ export * from './group';
 export * from './groupInput';
 export * from './groupUpdate';
 export * from './healthStatus';
+export * from './listChangelogsParams';
 export * from './listEndpointsParams';
 export * from './listEndpointsStatus';
 export * from './messageResponse';

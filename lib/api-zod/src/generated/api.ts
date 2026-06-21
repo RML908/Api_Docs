@@ -217,6 +217,83 @@ export const DeleteEndpointResponse = zod.object({
 
 
 /**
+ * @summary List changelog entries
+ */
+export const ListChangelogsQueryParams = zod.object({
+  "version": zod.coerce.string().optional()
+})
+
+export const ListChangelogsResponseItem = zod.object({
+  "id": zod.number(),
+  "version": zod.string(),
+  "title": zod.string(),
+  "content": zod.string(),
+  "publishedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const ListChangelogsResponse = zod.array(ListChangelogsResponseItem)
+
+
+/**
+ * @summary Create a changelog entry
+ */
+
+
+
+
+
+export const CreateChangelogBody = zod.object({
+  "version": zod.string().min(1),
+  "title": zod.string().min(1),
+  "content": zod.string().min(1),
+  "publishedAt": zod.coerce.date().nullish()
+})
+
+
+/**
+ * @summary Update a changelog entry
+ */
+export const UpdateChangelogParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+
+
+
+
+export const UpdateChangelogBody = zod.object({
+  "version": zod.string().min(1),
+  "title": zod.string().min(1),
+  "content": zod.string().min(1),
+  "publishedAt": zod.coerce.date().nullish()
+})
+
+export const UpdateChangelogResponse = zod.object({
+  "id": zod.number(),
+  "version": zod.string(),
+  "title": zod.string(),
+  "content": zod.string(),
+  "publishedAt": zod.coerce.date().nullish(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Delete a changelog entry
+ */
+export const DeleteChangelogParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteChangelogResponse = zod.object({
+  "message": zod.string()
+})
+
+
+/**
  * Returns aggregate counts — total endpoints, published, draft, deprecated, and group count
  * @summary Get dashboard statistics
  */

@@ -164,6 +164,28 @@ export interface EndpointUpdate {
   responseStatus?: number;
 }
 
+export interface Changelog {
+  id: number;
+  version: string;
+  title: string;
+  content: string;
+  /** @nullable */
+  publishedAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChangelogInput {
+  /** @minLength 1 */
+  version: string;
+  /** @minLength 1 */
+  title: string;
+  /** @minLength 1 */
+  content: string;
+  /** @nullable */
+  publishedAt?: string | null;
+}
+
 export interface Stats {
   total: number;
   published: number;
@@ -187,4 +209,8 @@ export const ListEndpointsStatus = {
   draft: 'draft',
   deprecated: 'deprecated',
 } as const;
+
+export type ListChangelogsParams = {
+version?: string;
+};
 

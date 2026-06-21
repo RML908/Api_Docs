@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { Book, Settings, Layers, Menu, ServerCrash, Search, LogOut, LogIn, Key } from "lucide-react";
+import { Book, Settings, Layers, Menu, ServerCrash, Search, LogOut, LogIn, Key, ScrollText } from "lucide-react";
 import { useHealthCheck } from "@workspace/api-client-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
@@ -18,12 +18,14 @@ export function Layout({ children, onOpenCommandPalette }: LayoutProps) {
 
   const publicLinks = [
     { href: "/", label: "API Reference", icon: Book },
+    { href: "/changelog", label: "Changelog", icon: ScrollText },
   ];
 
   const adminLinks = [
     { href: "/admin", label: "Dashboard", icon: Settings },
     { href: "/admin/groups", label: "Groups", icon: Layers },
     { href: "/admin/api-keys", label: "API Keys", icon: Key },
+    { href: "/admin/changelog", label: "Changelog", icon: ScrollText },
   ];
 
   const handleLogout = async () => {
