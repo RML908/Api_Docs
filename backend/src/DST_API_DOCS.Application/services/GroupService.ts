@@ -1,6 +1,7 @@
 import type { IGroupRepository } from '../interfaces/repositories/IGroupRepository';
 import type { CreateGroupDto, UpdateGroupDto, GroupResponseDto } from '../dtos/groups/GroupDtos';
 import type { GroupRow } from '../../DST_API_DOCS.Persistence/schema';
+import { omitUndefined } from '../utils/omitUndefined';
 
 function toDto(row: GroupRow): GroupResponseDto {
   return {
@@ -44,7 +45,7 @@ export class GroupService {
   }
 
   async updateGroup(id: number, dto: UpdateGroupDto, userId?: number): Promise<GroupResponseDto> {
-    const row = await this.groupRepo.update(id, { ...dto, updatedBy: userId ?? null });
+    const row = await this.groupRepo.update(id, omitUndefined({ ...dto, updatedBy: userId ?? null }));
     if (!row) throw Object.assign(new Error('Group not found'), { statusCode: 404 });
     return toDto(row);
   }

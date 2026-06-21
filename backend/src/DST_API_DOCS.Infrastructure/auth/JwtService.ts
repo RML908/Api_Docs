@@ -33,16 +33,16 @@ export class JwtService {
   }
 
   verifyAccessToken(token: string): JwtPayload {
-    return jwt.verify(token, this.accessSecret) as JwtPayload;
+    return jwt.verify(token, this.accessSecret) as unknown as JwtPayload;
   }
 
   verifyRefreshToken(token: string): JwtPayload {
-    return jwt.verify(token, this.refreshSecret) as JwtPayload;
+    return jwt.verify(token, this.refreshSecret) as unknown as JwtPayload;
   }
 
   decodeToken(token: string): JwtPayload | null {
     try {
-      return jwt.decode(token) as JwtPayload;
+      return jwt.decode(token) as unknown as JwtPayload;
     } catch {
       return null;
     }

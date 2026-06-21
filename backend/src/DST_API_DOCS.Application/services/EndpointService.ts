@@ -7,6 +7,7 @@ import type {
   EndpointResponseDto,
 } from '../dtos/endpoints/EndpointDtos';
 import type { EndpointRow } from '../../DST_API_DOCS.Persistence/schema';
+import { omitUndefined } from '../utils/omitUndefined';
 
 function toDto(row: EndpointRow): EndpointResponseDto {
   return {
@@ -34,12 +35,12 @@ export class EndpointService {
   ) {}
 
   async listEndpoints(query: ListEndpointsQuery): Promise<EndpointResponseDto[]> {
-    const rows = await this.endpointRepo.findAll({
+    const rows = await this.endpointRepo.findAll(omitUndefined({
       groupId: query.groupId,
       status: query.status,
       version: query.version,
       search: query.q,
-    });
+    }));
     return rows.map(toDto);
   }
 
@@ -70,7 +71,7 @@ export class EndpointService {
   }
 
   async updateEndpoint(id: number, dto: UpdateEndpointDto, userId?: number): Promise<EndpointResponseDto> {
-    const row = await this.endpointRepo.update(id, { ...dto, updatedBy: userId ?? null });
+    const row = await this.endpointRepo.update(id, omitUndefined({ ...dto, updatedBy: userId ?? null }));
     if (!row) throw Object.assign(new Error('Endpoint not found'), { statusCode: 404 });
     return toDto(row);
   }
