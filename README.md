@@ -191,4 +191,91 @@ sudo cp -r dist/* /var/www/dst-api-docs/
 sudo certbot --nginx -d api-docs.yourdomain.com
 ```
 
-## Environment Variable
+## Environment Variables
+
+### Backend (`backend/.env`)
+| Variable             | Required | Description                              |
+|----------------------|----------|------------------------------------------|
+| `NODE_ENV`           | Yes      | `development` / `staging` / `production` |
+| `PORT`               | Yes      | Server port (8080)                       |
+| `DATABASE_URL`       | Yes      | PostgreSQL connection string             |
+| `JWT_ACCESS_SECRET`  | Yes      | 64-char random hex                       |
+| `JWT_REFRESH_SECRET` | Yes      | 64-char random hex (different)           |
+| `CORS_ORIGIN`        | Yes      | Comma-separated allowed frontend origins |
+| `LOG_LEVEL`          | No       | `info` (default)                         |
+
+### Frontend (`frontend/.env`)
+| Variable        | Required | Description                             |
+|-----------------|----------|-----------------------------------------|
+| `VITE_API_URL`  | No       | Backend URL (blank = same origin proxy) |
+| `VITE_APP_NAME` | No       | App name in UI                          |
+
+## Database
+
+See [docs/DATABASE.md](docs/DATABASE.md) for ERD, migration strategy, backup/restore procedures.
+
+```bash
+npm run db:generate   # Generate SQL migration from schema change
+npm run db:migrate    # Apply pending migrations
+npm run db:studio     # Drizzle Studio GUI (localhost:4983)
+npm run db:seed       # Seed initial admin user
+```
+
+## Security
+
+- JWT access tokens expire in **15 minutes**; refresh tokens in **7 days** with automatic rotation
+- Passwords: bcrypt with 12 salt rounds
+- API keys: SHA-256 hashed — raw key shown only once at creation
+- Rate limits: 100 req/15min general, 10 req/15min on auth routes
+- Helmet sets `X-Frame-Options`, `Content-Security-Policy`, etc.
+- Soft delete — records are never physically removed, only flagged
+- Audit columns (`created_by`, `updated_by`) on all domain entities
+
+## Files Removed (Replit Cleanup)
+
+The following files from the original Replit project must be **manually deleted** from Windows (the shell cannot remove them due to file locking):
+
+```
+.replit
+.replitignore
+replit.md
+.npmrc
+api-portal.tar.gz
+api-portal-db.sql
+artifacts/api-docs/.replit-artifact/
+artifacts/api-server/.replit-artifact/
+artifacts/mockup-sandbox/     (entire directory)
+scripts/post-merge.sh
+pnpm-workspace.yaml
+pnpm-lock.yaml
+tsconfig.base.json
+tsconfig.json                 (root)
+package.json                  (root workspace)
+node_modules/                 (root)
+```
+
+## Troubleshooting
+
+**JWT secret errors on startup**
+```bash
+echo "JWT_ACCESS_SECRET=$(openssl rand -hex 64)" >> backend/.env
+echo "JWT_REFRESH_SECRET=$(openssl rand -hex 64)" >> backend/.env
+```
+
+**Database connection refused**
+```bash
+pg_isready -h localhost -p 5432
+psql $DATABASE_URL -c "SELECT 1"
+```
+
+**CORS errors in browser**
+```
+CORS_ORIGIN must match the frontend origin exactly — no trailing slash.
+Example: CORS_ORIGIN=http://localhost:5173
+```
+
+**Frontend blank page after build**
+```
+Ensure Nginx is configured with `try_files $uri $uri/ /index.html`
+for the React Router SPA fallback.
+```
