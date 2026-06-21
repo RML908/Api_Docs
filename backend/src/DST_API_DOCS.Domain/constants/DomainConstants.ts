@@ -1,0 +1,10 @@
+export const JWT_ACCESS_EXPIRES_IN = '15m';
+export const JWT_REFRESH_EXPIRES_IN = '7d';
+export const BCRYPT_SALT_ROUNDS = 12;
+export const API_KEY_PREFIX = 'dak_';
+export const API_VERSION = 'v1';
+export const DEFAULT_PAGE_SIZE = 20;
+export const MAX_PAGE_SIZE = 100;
+export const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+export const RATE_LIMIT_MAX_REQUESTS = 100;
+export const AUTH_RATE_LIMIT_MAX = 10;
