@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -98,7 +98,7 @@ export default function AdminLogin() {
 
         <p className="text-center text-xs text-muted-foreground">
           Public API docs are available at{" "}
-          <a href="/" className="text-primary hover:underline">API Reference</a>
+          <Link href="/" className="text-primary hover:underline">API Reference</Link>
           {" "}— no login required.
         </p>
       </div>
