@@ -1,127 +1,164 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGroups } from '@/hooks/useGroups';
 import { useEndpoints } from '@/hooks/useEndpoints';
 import { MethodBadge } from '@/components/common/MethodBadge';
 import { StatusBadge } from '@/components/common/StatusBadge';
-import { Search, ChevronDown, ChevronRight } from 'lucide-react';
-import type { Endpoint, EndpointStatus, Group } from '@/types';
-
-function EndpointRow({ endpoint: ep }: { endpoint: Endpoint }) {
-  const [expanded, setExpanded] = useState(false);
-  const hasDetails = ep.description || ep.params || ep.responseExample;
-
-  return (
-    <div className="border-b border-gray-50 last:border-0">
-      <button
-        onClick={() => hasDetails && setExpanded((v) => !v)}
-        className={`flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-gray-50 ${hasDetails ? 'cursor-pointer' : 'cursor-default'}`}
-      >
-        <MethodBadge method={ep.method} />
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <code className="truncate text-sm font-mono text-gray-700">{ep.path}</code>
-            <span className="text-xs text-gray-400">{ep.version}</span>
-          </div>
-          <p className="mt-0.5 text-xs text-gray-500">{ep.summary}</p>
-        </div>
-        <StatusBadge status={ep.status as EndpointStatus} />
-        {hasDetails && (
-          expanded ? <ChevronDown className="mt-0.5 h-4 w-4 text-gray-400" /> : <ChevronRight className="mt-0.5 h-4 w-4 text-gray-400" />
-        )}
-      </button>
-
-      {expanded && hasDetails && (
-        <div className="space-y-3 border-t border-gray-100 bg-gray-50 px-4 py-3">
-          {ep.description && (
-            <div>
-              <p className="text-xs font-semibold uppercase text-gray-500">Description</p>
-              <p className="mt-1 text-sm text-gray-700">{ep.description}</p>
-            </div>
-          )}
-          <div className="grid gap-3 sm:grid-cols-2">
-            {ep.params && (
-              <div>
-                <p className="text-xs font-semibold uppercase text-gray-500">Request Format</p>
-                <pre className="mt-1 overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-gray-100"><code>{ep.params}</code></pre>
-              </div>
-            )}
-            {ep.responseExample && (
-              <div>
-                <p className="text-xs font-semibold uppercase text-gray-500">
-                  Response Format{ep.responseStatus ? ` (${ep.responseStatus})` : ''}
-                </p>
-                <pre className="mt-1 overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-gray-100"><code>{ep.responseExample}</code></pre>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function GroupSection({ group }: { group: Group }) {
-  const [open, setOpen] = useState(true);
-  const { data: endpoints = [] } = useEndpoints({ groupId: group.id, status: 'published' });
-
-  return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center gap-3 p-4 text-left hover:bg-gray-50"
-      >
-        <span className="text-xl">{group.icon}</span>
-        <div className="flex-1">
-          <p className="font-semibold text-gray-900">{group.name}</p>
-          {group.description && <p className="text-xs text-gray-500">{group.description}</p>}
-        </div>
-        <span className="text-xs text-gray-400">{endpoints.length}</span>
-        {open ? <ChevronDown className="h-4 w-4 text-gray-400" /> : <ChevronRight className="h-4 w-4 text-gray-400" />}
-      </button>
-
-      {open && endpoints.length > 0 && (
-        <div className="border-t border-gray-100">
-          {endpoints.map((ep) => <EndpointRow key={ep.id} endpoint={ep} />)}
-        </div>
-      )}
-    </div>
-  );
-}
+import { JsonSchemaTable } from '@/components/common/JsonSchemaTable';
+import { CodeSamplePanel } from '@/components/common/CodeSamplePanel';
+import { getRequestBody, getResponseBody } from '@/utils/codeSamples';
+import { Search } from 'lucide-react';
+import type { Endpoint, EndpointStatus } from '@/types';
+import { cn } from '@/utils/cn';
 
 export default function PublicDocs() {
-  const { data: groups = [], isLoading } = useGroups();
+  const { data: groups = [], isLoading: groupsLoading } = useGroups();
+  const { data: endpoints = [], isLoading: endpointsLoading } = useEndpoints({ status: 'published' });
   const [search, setSearch] = useState('');
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const filtered = groups.filter(
-    (g) => !search || g.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  const byGroup = useMemo(() => {
+    const map = new Map<number, Endpoint[]>();
+    for (const ep of endpoints) {
+      const list = map.get(ep.groupId) ?? [];
+      list.push(ep);
+      map.set(ep.groupId, list);
+    }
+    return map;
+  }, [endpoints]);
+
+  const filteredGroups = useMemo(() => {
+    if (!search) return groups;
+    const q = search.toLowerCase();
+    return groups.filter((g) => {
+      if (g.name.toLowerCase().includes(q)) return true;
+      return (byGroup.get(g.id) ?? []).some(
+        (ep) => ep.path.toLowerCase().includes(q) || ep.summary.toLowerCase().includes(q),
+      );
+    });
+  }, [groups, byGroup, search]);
+
+  useEffect(() => {
+    if (selectedId === null && endpoints.length > 0) {
+      setSelectedId(endpoints[0]!.id);
+    }
+  }, [endpoints, selectedId]);
+
+  const selected = endpoints.find((ep) => ep.id === selectedId) ?? null;
+  const isLoading = groupsLoading || endpointsLoading;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">API Documentation</h1>
-        <p className="mt-2 text-gray-500">Browse all available API endpoints</p>
-      </div>
-
-      <div className="mb-6 flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5">
-        <Search className="h-4 w-4 text-gray-400" />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search groups…"
-          className="flex-1 bg-transparent text-sm outline-none"
-        />
-      </div>
-
-      {isLoading ? (
-        <div className="space-y-3">
-          {Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-200" />)}
+    <div className="flex" style={{ minHeight: 'calc(100vh - 56px)' }}>
+      {/* Sidebar */}
+      <aside className="w-72 shrink-0 overflow-y-auto border-r border-gray-200 bg-white">
+        <div className="border-b border-gray-100 p-3">
+          <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2">
+            <Search className="h-4 w-4 text-gray-400" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search…"
+              className="flex-1 bg-transparent text-sm outline-none"
+            />
+          </div>
         </div>
-      ) : (
-        <div className="space-y-3">
-          {filtered.map((group) => <GroupSection key={group.id} group={group} />)}
-          {filtered.length === 0 && <p className="text-center text-sm text-gray-400 py-8">No groups found</p>}
-        </div>
+
+        {isLoading ? (
+          <div className="space-y-2 p-3">
+            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-8 animate-pulse rounded bg-gray-100" />)}
+          </div>
+        ) : (
+          <nav className="p-2">
+            {filteredGroups.map((group) => {
+              const groupEndpoints = byGroup.get(group.id) ?? [];
+              if (groupEndpoints.length === 0) return null;
+              return (
+                <div key={group.id} className="mb-3">
+                  <div className="flex items-center gap-2 px-2 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    <span>{group.icon}</span>
+                    <span>{group.name}</span>
+                  </div>
+                  <div>
+                    {groupEndpoints.map((ep) => (
+                      <button
+                        key={ep.id}
+                        onClick={() => setSelectedId(ep.id)}
+                        className={cn(
+                          'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm',
+                          selectedId === ep.id ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50',
+                        )}
+                      >
+                        <MethodBadge method={ep.method} />
+                        <span className="truncate font-mono text-xs">{ep.path}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+            {filteredGroups.length === 0 && (
+              <p className="px-2 py-4 text-center text-sm text-gray-400">No endpoints found</p>
+            )}
+          </nav>
+        )}
+      </aside>
+
+      {/* Main content */}
+      <main className="min-w-0 flex-1 overflow-y-auto px-8 py-8">
+        {!selected ? (
+          <div className="flex h-full items-center justify-center text-sm text-gray-400">
+            {isLoading ? 'Loading…' : 'Select an endpoint to view its documentation'}
+          </div>
+        ) : (
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-1 flex items-center gap-2">
+              <MethodBadge method={selected.method} />
+              <code className="font-mono text-sm text-gray-700">{selected.path}</code>
+              <span className="text-xs text-gray-400">{selected.version}</span>
+              <StatusBadge status={selected.status as EndpointStatus} />
+            </div>
+            <h1 className="mt-2 text-2xl font-bold text-gray-900">{selected.summary}</h1>
+            {selected.description && (
+              <p className="mt-3 text-sm leading-relaxed text-gray-600">{selected.description}</p>
+            )}
+
+            {getRequestBody(selected) !== null ? (
+              <section className="mt-8">
+                <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Request Body</h2>
+                <JsonSchemaTable data={getRequestBody(selected)} />
+              </section>
+            ) : selected.params ? (
+              <section className="mt-8">
+                <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Request Format</h2>
+                <pre className="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-gray-100"><code>{selected.params}</code></pre>
+              </section>
+            ) : null}
+
+            <section className="mt-8">
+              <div className="mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Response</h2>
+                {selected.responseStatus && (
+                  <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                    {selected.responseStatus}
+                  </span>
+                )}
+              </div>
+              {getResponseBody(selected) !== null ? (
+                <JsonSchemaTable data={getResponseBody(selected)} />
+              ) : selected.responseExample ? (
+                <pre className="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-gray-100"><code>{selected.responseExample}</code></pre>
+              ) : (
+                <p className="text-sm text-gray-400">No response example provided.</p>
+              )}
+            </section>
+          </div>
+        )}
+      </main>
+
+      {/* Code samples */}
+      {selected && (
+        <aside className="w-96 shrink-0 overflow-y-auto bg-gray-950 px-6 py-8">
+          <CodeSamplePanel endpoint={selected} />
+        </aside>
       )}
     </div>
   );

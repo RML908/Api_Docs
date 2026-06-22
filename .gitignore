@@ -5,6 +5,8 @@ dist
 tmp
 out-tsc
 *.tsbuildinfo
+vite.config.d.ts
+vite.config.d.ts.map
 .expo
 .expo-shared
 
