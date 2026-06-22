@@ -16,11 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   		exit();
     }
 
- 	$doctor_id = isset($_GET['doctor_id']) ? $_GET['doctor_id'] : '';
- 	$doctor_ssn = isset($_GET['doctor_ssn']) ? $_GET['doctor_ssn'] : '';
- 	$block_start = isset($_GET['block_start']) ? $_GET['block_start'] : '';
- 	$block_end = isset($_GET['block_end']) ? $_GET['block_end'] : '';
- 	$note = isset($_GET['note']) ? $_GET['note'] : '';
+
+  if (isset($_POST['doctor_ssn'])) {$doctor_ssn = $_POST['doctor_ssn'];}
 
 function getConnection() {
     $dbConfig = include('config.php');
@@ -56,31 +53,24 @@ function getConnection() {
 
     $conn = getConnection();
 
-  $Sql_Query = "INSERT INTO dst_doctors_blocked_time(created_date, doctor_id, doctor_ssn, block_start, block_end, note) VALUES(NOW(), '$doctor_id', '$doctor_ssn', '$block_start', '$block_end', '$note')";
+	$stmt = $conn->prepare("SELECT id, doctor_ssn, block_start, block_end, 'block' as type FROM dst_doctors_blocked_time WHERE doctor_ssn = '$doctor_ssn' AND block_end > NOW() AND visible = 1 UNION ALL SELECT id, doctor_ssn, visit_date as block_start, visit_date_end as block_end, 'appointment' as type FROM dst_patient_schedule WHERE doctor_ssn = '$doctor_ssn' AND visit_date_end > NOW() AND completed_by = 0 AND cancelled_by = 0 AND visible = 1");
+	$stmt->execute();
+	$stmt->bind_result($id, $doctor_ssn, $block_start, $block_end, $type);
 
+	$dst_doctors_blocked_time = array();
 
-  	$medcard_patients_reviews = array();
 	header('Content-type: application/json');
 
-	if(mysqli_query($conn,$Sql_Query))
-	{
-		$last_id = mysqli_insert_id($conn);
+	while($stmt->fetch()){
 		$temp = array();
-		$temp['status'] = '1';
-		$temp['id'] = $last_id;
-		$temp['message'] = 'The data has been created successfully';
-		array_push($medcard_patients_reviews, $temp);
-		echo json_encode($medcard_patients_reviews,JSON_UNESCAPED_UNICODE);
+		$temp['id'] = $id;
+		$temp['doctor_ssn'] = $doctor_ssn;
+		$temp['block_start'] = $block_start;
+		$temp['block_end'] = $block_end;
+		$temp['type'] = $type;
+	array_push($dst_doctors_blocked_time, $temp);
 	}
-	else
-	{
- 		$temp = array();
-	    $temp['status'] = '0';
-		$temp['message'] = 'Something went wrong';
-	    http_response_code(403);
-	    array_push($medcard_patients_reviews, $temp);
-		echo json_encode($medcard_patients_reviews,JSON_UNESCAPED_UNICODE);
-	}
+	echo json_encode($dst_doctors_blocked_time,JSON_UNESCAPED_UNICODE);
 
 	$conn->close();
 

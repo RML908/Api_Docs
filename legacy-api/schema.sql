@@ -34,7 +34,9 @@ CREATE TABLE IF NOT EXISTS dst_patient_schedule (
   payment_type_name VARCHAR(100) NULL,
   status VARCHAR(50) NOT NULL DEFAULT 'Pending',
   cancelled_date DATETIME NULL,
-  cancelled_by INT NULL,
+  cancelled_by INT NOT NULL DEFAULT 0,
+  completed_by INT NOT NULL DEFAULT 0,
+  visible TINYINT NOT NULL DEFAULT 1,
   queue_confirmed_date DATETIME NULL,
   queue_confirmed_by INT NULL
 );
@@ -53,7 +55,8 @@ CREATE TABLE IF NOT EXISTS dst_doctors_blocked_time (
   doctor_ssn VARCHAR(50) NULL,
   block_start DATETIME NULL,
   block_end DATETIME NULL,
-  note TEXT NULL
+  note TEXT NULL,
+  visible TINYINT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS dst_hospital_users_list (

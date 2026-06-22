@@ -173,35 +173,27 @@ paths:
         "403":
           description: Validation failure or DB error
 
-  /set_doctor_block_time:
+  /get_doctor_block_time:
     post:
-      summary: Block Doctor Time Slot
+      summary: Get Doctor Blocked Time & Appointments
       description: >
-        Creates a blocked time entry for a doctor. The HTTP method is POST,
-        but parameters are read from the query string, not the body
-        (matches the original implementation's quirk).
-      parameters:
-        - name: doctor_id
-          in: query
-          schema: { type: string }
-        - name: doctor_ssn
-          in: query
-          required: true
-          schema: { type: string }
-        - name: block_start
-          in: query
-          required: true
-          schema: { type: string, example: "2026-08-01 09:00:00" }
-        - name: block_end
-          in: query
-          required: true
-          schema: { type: string, example: "2026-08-01 12:00:00" }
-        - name: note
-          in: query
-          schema: { type: string }
+        Returns a doctor's upcoming blocked time slots and active appointments
+        combined (excludes completed/cancelled visits and hidden blocks),
+        useful for checking availability.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [doctor_ssn]
+              properties:
+                doctor_ssn:
+                  type: string
+                  example: "0001"
       responses:
         "200":
-          description: Created
+          description: OK
           content:
             application/json:
               schema:
@@ -209,8 +201,8 @@ paths:
                 items:
                   type: object
                   properties:
-                    status: { type: string, example: "1" }
                     id: { type: integer, example: 1 }
-                    message: { type: string, example: "The data has been created successfully" }
-        "403":
-          description: Validation failure or DB error
+                    doctor_ssn: { type: string, example: "0001" }
+                    block_start: { type: string, example: "2026-08-01 09:00:00" }
+                    block_end: { type: string, example: "2026-08-01 12:00:00" }
+                    type: { type: string, enum: [block, appointment], example: "block" }
