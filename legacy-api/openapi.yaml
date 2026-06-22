@@ -1,0 +1,216 @@
+openapi: 3.1.0
+info:
+  title: Hospital Scheduling API (Test Environment)
+  version: "1.0.0"
+  description: >
+    Isolated test environment for the hospital patient scheduling endpoints.
+    Uses a single shared test database; safe to test freely without affecting
+    production data. hospital_id routing has been removed for this test
+    deployment.
+servers:
+  - url: https://dstapidocs.space/legacy-api
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+paths:
+  /set_patient_schedule:
+    post:
+      summary: Create Patient Schedule
+      description: Registers a new patient visit/appointment.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [visit_date, patient_ssn, patient_name, patient_surname, patient_phone_mobile, department_id, doctor_ssn]
+              properties:
+                visit_date:
+                  type: string
+                  example: "2026-07-01 10:00:00"
+                visit_duration:
+                  type: string
+                  example: "30"
+                type_of_visit_id:
+                  type: string
+                  example: "1"
+                type_of_visit:
+                  type: string
+                patient_ssn:
+                  type: string
+                patient_document:
+                  type: string
+                patient_name:
+                  type: string
+                patient_surname:
+                  type: string
+                patient_middlename:
+                  type: string
+                patient_birthday:
+                  type: string
+                  example: "1990-01-01"
+                patient_gender:
+                  type: string
+                patient_phone_mobile:
+                  type: string
+                patient_mail:
+                  type: string
+                complaints:
+                  type: string
+                insurance_id:
+                  type: string
+                insurance_name:
+                  type: string
+                insurance_policy_no:
+                  type: string
+                department_id:
+                  type: string
+                department_name:
+                  type: string
+                doctor_ssn:
+                  type: string
+                doctor_name:
+                  type: string
+                note:
+                  type: string
+                have_a_referral:
+                  type: string
+                  example: "0"
+                payment_type_id:
+                  type: string
+                  example: "3"
+                services:
+                  type: string
+                  description: JSON array of {service_id, service_name} objects
+                  example: "[]"
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status: { type: string, example: "1" }
+                    message: { type: string, example: "Registration Successfully" }
+                    row_id: { type: integer, example: 1 }
+        "403":
+          description: Validation failure or DB error
+
+  /set_patient_schedule_update:
+    post:
+      summary: Update Patient Schedule Visit Date
+      description: Reschedules an existing patient visit and resets its status to Pending.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [schedule_id, visit_date]
+              properties:
+                schedule_id:
+                  type: string
+                  example: "1"
+                visit_date:
+                  type: string
+                  example: "2026-07-02 11:00:00"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status: { type: string, example: "1" }
+                    message: { type: string, example: "The queue has been successfully edited" }
+        "403":
+          description: Validation failure or DB error
+
+  /set_patient_schedule_cancel:
+    post:
+      summary: Cancel Patient Schedule
+      description: Cancels an existing patient visit.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [schedule_id, cancelled_by, cancelled_date]
+              properties:
+                schedule_id:
+                  type: string
+                  example: "1"
+                cancelled_by:
+                  type: string
+                  example: "1"
+                cancelled_date:
+                  type: string
+                  example: "2026-07-01 09:00:00"
+      responses:
+        "200":
+          description: Cancelled
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status: { type: string, example: "1" }
+                    message: { type: string, example: "Queue canceled successfully" }
+                    schedule_id: { type: string, example: "1" }
+        "403":
+          description: Validation failure or DB error
+
+  /set_doctor_block_time:
+    get:
+      summary: Block Doctor Time Slot
+      description: >
+        Creates a blocked time entry for a doctor. Despite being a write
+        operation, this endpoint reads its parameters from the query string
+        (matches the original implementation).
+      parameters:
+        - name: doctor_id
+          in: query
+          schema: { type: string }
+        - name: doctor_ssn
+          in: query
+          required: true
+          schema: { type: string }
+        - name: block_start
+          in: query
+          required: true
+          schema: { type: string, example: "2026-08-01 09:00:00" }
+        - name: block_end
+          in: query
+          required: true
+          schema: { type: string, example: "2026-08-01 12:00:00" }
+        - name: note
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    status: { type: string, example: "1" }
+                    id: { type: integer, example: 1 }
+                    message: { type: string, example: "The data has been created successfully" }
+        "403":
+          description: Validation failure or DB error

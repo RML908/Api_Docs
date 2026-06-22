@@ -1,0 +1,109 @@
+{
+  "info": {
+    "name": "Hospital Scheduling API (Test)",
+    "description": "Test environment for the hospital patient scheduling endpoints. Isolated database, safe to test freely.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MjkzMTk1MDAsImV4cCI6MTc2MDg1NTUwMCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.73yulxFZZVxnx-Pi0q7VAlw4d2Q5phHZ3IJouKkvaG0",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://dstapidocs.space/legacy-api" }
+  ],
+  "item": [
+    {
+      "name": "Create Patient Schedule",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/set_patient_schedule",
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "visit_date", "value": "2026-07-01 10:00:00" },
+            { "key": "visit_duration", "value": "30" },
+            { "key": "type_of_visit_id", "value": "1" },
+            { "key": "type_of_visit", "value": "Consultation" },
+            { "key": "patient_ssn", "value": "1234567890" },
+            { "key": "patient_document", "value": "" },
+            { "key": "patient_name", "value": "Test" },
+            { "key": "patient_surname", "value": "Patient" },
+            { "key": "patient_middlename", "value": "" },
+            { "key": "patient_birthday", "value": "1990-01-01" },
+            { "key": "patient_gender", "value": "M" },
+            { "key": "patient_phone_mobile", "value": "+37499000000" },
+            { "key": "patient_mail", "value": "" },
+            { "key": "complaints", "value": "" },
+            { "key": "insurance_id", "value": "0" },
+            { "key": "insurance_name", "value": "" },
+            { "key": "insurance_policy_no", "value": "" },
+            { "key": "department_id", "value": "1" },
+            { "key": "department_name", "value": "General" },
+            { "key": "doctor_ssn", "value": "0001" },
+            { "key": "doctor_name", "value": "" },
+            { "key": "note", "value": "" },
+            { "key": "have_a_referral", "value": "0" },
+            { "key": "payment_type_id", "value": "3" },
+            { "key": "services", "value": "[]" }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Patient Schedule",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/set_patient_schedule_update",
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "schedule_id", "value": "1" },
+            { "key": "visit_date", "value": "2026-07-02 11:00:00" }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel Patient Schedule",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/set_patient_schedule_cancel",
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "schedule_id", "value": "1" },
+            { "key": "cancelled_by", "value": "1" },
+            { "key": "cancelled_date", "value": "2026-07-01 09:00:00" }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Block Doctor Time",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/set_doctor_block_time?doctor_ssn=0001&block_start=2026-08-01 09:00:00&block_end=2026-08-01 12:00:00&note=Vacation",
+          "host": ["{{baseUrl}}"],
+          "path": ["set_doctor_block_time"],
+          "query": [
+            { "key": "doctor_ssn", "value": "0001" },
+            { "key": "block_start", "value": "2026-08-01 09:00:00" },
+            { "key": "block_end", "value": "2026-08-01 12:00:00" },
+            { "key": "note", "value": "Vacation" }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
