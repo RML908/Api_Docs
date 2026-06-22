@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { BookOpen } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 export function PublicNavbar() {
@@ -11,8 +10,8 @@ export function PublicNavbar() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <NavLink to="/" className="flex items-center gap-2 font-semibold text-gray-900">
-            <BookOpen className="h-5 w-5 text-blue-600" />
-            DST API Docs
+            <img src="/dst-logo.webp" alt="DST" className="h-7 w-auto" />
+            <span>API Docs</span>
           </NavLink>
           <nav className="flex items-center gap-4">
             <NavLink
