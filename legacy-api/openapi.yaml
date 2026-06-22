@@ -174,12 +174,12 @@ paths:
           description: Validation failure or DB error
 
   /set_doctor_block_time:
-    get:
+    post:
       summary: Block Doctor Time Slot
       description: >
-        Creates a blocked time entry for a doctor. Despite being a write
-        operation, this endpoint reads its parameters from the query string
-        (matches the original implementation).
+        Creates a blocked time entry for a doctor. The HTTP method is POST,
+        but parameters are read from the query string, not the body
+        (matches the original implementation's quirk).
       parameters:
         - name: doctor_id
           in: query

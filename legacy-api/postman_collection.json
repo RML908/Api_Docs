@@ -90,7 +90,7 @@
     {
       "name": "Block Doctor Time",
       "request": {
-        "method": "GET",
+        "method": "POST",
         "url": {
           "raw": "{{baseUrl}}/set_doctor_block_time?doctor_ssn=0001&block_start=2026-08-01 09:00:00&block_end=2026-08-01 12:00:00&note=Vacation",
           "host": ["{{baseUrl}}"],
