@@ -12,6 +12,7 @@ import {
   BookOpen,
   Menu,
   X,
+  Database,
 } from 'lucide-react';
 
 const NAV = [
@@ -20,6 +21,7 @@ const NAV = [
   { to: '/admin/endpoints', label: 'Endpoints', icon: Zap, end: false },
   { to: '/admin/changelog', label: 'Changelog', icon: ScrollText, end: false },
   { to: '/admin/api-keys', label: 'API Keys', icon: Key, end: false },
+  { to: '/admin/legacy-data', label: 'Legacy Test Data', icon: Database, end: false },
 ];
 
 export function AdminLayout() {

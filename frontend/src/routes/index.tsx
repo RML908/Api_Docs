@@ -17,6 +17,7 @@ import AdminGroups from '@/pages/admin/AdminGroups';
 import AdminEndpoints from '@/pages/admin/AdminEndpoints';
 import AdminChangelog from '@/pages/admin/AdminChangelog';
 import AdminApiKeys from '@/pages/admin/AdminApiKeys';
+import AdminLegacyData from '@/pages/admin/AdminLegacyData';
 
 // Error pages
 import NotFoundPage from '@/pages/NotFoundPage';
@@ -42,6 +43,7 @@ export const router = createBrowserRouter([
           { path: 'endpoints', element: <AdminEndpoints /> },
           { path: 'changelog', element: <AdminChangelog /> },
           { path: 'api-keys', element: <AdminApiKeys /> },
+          { path: 'legacy-data', element: <AdminLegacyData /> },
         ],
       },
       { path: '*', element: <NotFoundPage /> },
