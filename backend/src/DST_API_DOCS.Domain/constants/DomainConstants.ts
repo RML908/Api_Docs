@@ -8,3 +8,4 @@ export const MAX_PAGE_SIZE = 100;
 export const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 export const RATE_LIMIT_MAX_REQUESTS = 100;
 export const AUTH_RATE_LIMIT_MAX = 10;
+export const WRITE_RATE_LIMIT_MAX = 30;

@@ -1,5 +1,10 @@
 import rateLimit from 'express-rate-limit';
-import { RATE_LIMIT_WINDOW_MS, RATE_LIMIT_MAX_REQUESTS, AUTH_RATE_LIMIT_MAX } from '../../DST_API_DOCS.Domain/constants/DomainConstants';
+import {
+  RATE_LIMIT_WINDOW_MS,
+  RATE_LIMIT_MAX_REQUESTS,
+  AUTH_RATE_LIMIT_MAX,
+  WRITE_RATE_LIMIT_MAX,
+} from '../../DST_API_DOCS.Domain/constants/DomainConstants';
 import { failure } from '../../DST_API_DOCS.Application/dtos/common/ApiResponse';
 
 export const generalRateLimiter = rateLimit({
@@ -19,5 +24,15 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
   handler: (_req, res) => {
     res.status(429).json(failure(['Too many login attempts, please try again later'], 'Rate limit exceeded'));
+  },
+});
+
+export const writeRateLimiter = rateLimit({
+  windowMs: RATE_LIMIT_WINDOW_MS,
+  max: WRITE_RATE_LIMIT_MAX,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (_req, res) => {
+    res.status(429).json(failure(['Too many write requests, please try again later'], 'Rate limit exceeded'));
   },
 });

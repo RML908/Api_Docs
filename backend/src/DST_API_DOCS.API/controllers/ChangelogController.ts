@@ -2,14 +2,16 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { changelogService } from '../di/container';
 import { authenticate } from '../middleware/authenticate';
+import { writeRateLimiter } from '../middleware/rateLimiter';
 import { requireAdmin } from '../middleware/authorize';
+import { publicCache } from '../middleware/cache';
 import { validateBody } from '../filters/ValidationFilter';
 import { CreateChangelogSchema, UpdateChangelogSchema } from '../../DST_API_DOCS.Application/dtos/changelogs/ChangelogDtos';
 import { success } from '../../DST_API_DOCS.Application/dtos/common/ApiResponse';
 
 const router = Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', publicCache(30), async (req, res, next) => {
   try {
     const version = typeof req.query['version'] === 'string' ? req.query['version'] : undefined;
     const data = await changelogService.listChangelogs(version);
@@ -17,14 +19,14 @@ router.get('/', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-router.post('/', authenticate, requireAdmin, validateBody(CreateChangelogSchema), async (req, res, next) => {
+router.post('/', authenticate, requireAdmin, writeRateLimiter, validateBody(CreateChangelogSchema), async (req, res, next) => {
   try {
     const data = await changelogService.createChangelog(req.body, req.user?.id);
     res.status(201).json(success(data, 'Changelog created'));
   } catch (err) { next(err); }
 });
 
-router.patch('/:id', authenticate, requireAdmin, validateBody(UpdateChangelogSchema), async (req, res, next) => {
+router.patch('/:id', authenticate, requireAdmin, writeRateLimiter, validateBody(UpdateChangelogSchema), async (req, res, next) => {
   try {
     const id = Number(req.params['id']);
     if (isNaN(id)) { res.status(400).json({ success: false, message: 'Invalid ID', data: null, errors: [] }); return; }
@@ -33,7 +35,7 @@ router.patch('/:id', authenticate, requireAdmin, validateBody(UpdateChangelogSch
   } catch (err) { next(err); }
 });
 
-router.delete('/:id', authenticate, requireAdmin, async (req, res, next) => {
+router.delete('/:id', authenticate, requireAdmin, writeRateLimiter, async (req, res, next) => {
   try {
     const id = Number(req.params['id']);
     if (isNaN(id)) { res.status(400).json({ success: false, message: 'Invalid ID', data: null, errors: [] }); return; }
