@@ -69,8 +69,42 @@ services:
       start_period: 10s
       retries: 3
 
+  # ─── Legacy API test DB (MySQL) ─────────────────────────────────────────────
+  mysql_legacy:
+    image: mysql:8.0
+    container_name: dst_mysql_legacy
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${LEGACY_DB_PASSWORD:-changeme}
+      MYSQL_DATABASE: legacy_test
+      MYSQL_USER: legacy_test
+      MYSQL_PASSWORD: ${LEGACY_DB_PASSWORD:-changeme}
+    volumes:
+      - mysql_legacy_data:/var/lib/mysql
+      - ./legacy-api/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${LEGACY_DB_PASSWORD:-changeme}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ─── Legacy API (PHP test scripts) ──────────────────────────────────────────
+  legacy-api:
+    build:
+      context: ./legacy-api
+      dockerfile: Dockerfile
+    container_name: dst_legacy_api
+    restart: unless-stopped
+    depends_on:
+      mysql_legacy:
+        condition: service_healthy
+    environment:
+      LEGACY_DB_PASSWORD: ${LEGACY_DB_PASSWORD:-changeme}
+
 volumes:
   postgres_data:
+    driver: local
+  mysql_legacy_data:
     driver: local
 
 networks:

@@ -8,7 +8,7 @@ type Tab = typeof TABS[number];
 
 export function CodeSamplePanel({ endpoint }: { endpoint: Endpoint }) {
   const [tab, setTab] = useState<Tab>('cURL');
-  const baseUrl = `${window.location.origin}/api/v1`;
+  const baseUrl = window.location.origin;
 
   const sample =
     tab === 'cURL' ? buildCurlSample(endpoint, baseUrl) :

@@ -88,7 +88,7 @@ export default function PublicDocs() {
                         )}
                       >
                         <MethodBadge method={ep.method} />
-                        <span className="truncate font-mono text-xs">{ep.path.replace(/\.php$/, '')}</span>
+                        <span className="truncate font-mono text-xs">{ep.path}</span>
                       </button>
                     ))}
                   </div>
