@@ -107,11 +107,12 @@
     {
       "name": "Get Doctor Block Time",
       "request": {
-        "method": "POST",
-        "url": "{{baseUrl}}/get_doctor_block_time",
-        "body": {
-          "mode": "urlencoded",
-          "urlencoded": [
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/get_doctor_block_time?doctor_ssn=0001",
+          "host": ["{{baseUrl}}"],
+          "path": ["get_doctor_block_time"],
+          "query": [
             { "key": "doctor_ssn", "value": "0001" }
           ]
         }

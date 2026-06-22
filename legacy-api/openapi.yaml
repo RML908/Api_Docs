@@ -216,23 +216,17 @@ paths:
           description: Validation failure or DB error
 
   /get_doctor_block_time:
-    post:
+    get:
       summary: Get Doctor Blocked Time & Appointments
       description: >
         Returns a doctor's upcoming blocked time slots and active appointments
         combined (excludes completed/cancelled visits and hidden blocks),
         useful for checking availability.
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              required: [doctor_ssn]
-              properties:
-                doctor_ssn:
-                  type: string
-                  example: "0001"
+      parameters:
+        - name: doctor_ssn
+          in: query
+          required: true
+          schema: { type: string, example: "0001" }
       responses:
         "200":
           description: OK

@@ -1,9 +1,9 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: *");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
   $headers = apache_request_headers();
 
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-  if (isset($_POST['doctor_ssn'])) {$doctor_ssn = $_POST['doctor_ssn'];}
+  if (isset($_GET['doctor_ssn'])) {$doctor_ssn = $_GET['doctor_ssn'];}
 
 function getConnection() {
     $dbConfig = include('config.php');
