@@ -28,16 +28,32 @@ export default function PublicDocs() {
     return map;
   }, [endpoints]);
 
-  const filteredGroups = useMemo(() => {
-    if (!search) return groups;
-    const q = search.toLowerCase();
-    return groups.filter((g) => {
-      if (g.name.toLowerCase().includes(q)) return true;
-      return (byGroup.get(g.id) ?? []).some(
-        (ep) => ep.path.toLowerCase().includes(q) || ep.summary.toLowerCase().includes(q),
-      );
-    });
+  const matchesQuery = (ep: Endpoint, q: string) =>
+    ep.path.toLowerCase().includes(q) ||
+    ep.summary.toLowerCase().includes(q) ||
+    ep.method.toLowerCase().includes(q) ||
+    (ep.description?.toLowerCase().includes(q) ?? false);
+
+  const visibleByGroup = useMemo(() => {
+    const map = new Map<number, Endpoint[]>();
+    const q = search.trim().toLowerCase();
+    for (const group of groups) {
+      const groupEndpoints = byGroup.get(group.id) ?? [];
+      if (!q) {
+        map.set(group.id, groupEndpoints);
+        continue;
+      }
+      const groupNameMatches = group.name.toLowerCase().includes(q);
+      const visible = groupNameMatches ? groupEndpoints : groupEndpoints.filter((ep) => matchesQuery(ep, q));
+      map.set(group.id, visible);
+    }
+    return map;
   }, [groups, byGroup, search]);
+
+  const filteredGroups = useMemo(
+    () => groups.filter((g) => (visibleByGroup.get(g.id) ?? []).length > 0),
+    [groups, visibleByGroup],
+  );
 
   useEffect(() => {
     if (selectedId === null && endpoints.length > 0) {
@@ -115,7 +131,7 @@ export default function PublicDocs() {
           ) : (
             <nav className="p-2">
               {filteredGroups.map((group) => {
-                const groupEndpoints = byGroup.get(group.id) ?? [];
+                const groupEndpoints = visibleByGroup.get(group.id) ?? [];
                 if (groupEndpoints.length === 0) return null;
                 return (
                   <div key={group.id} className="mb-3">
