@@ -231,28 +231,6 @@ npm run db:seed       # Seed initial admin user
 - Soft delete — records are never physically removed, only flagged
 - Audit columns (`created_by`, `updated_by`) on all domain entities
 
-## Files Removed (Replit Cleanup)
-
-The following files from the original Replit project must be **manually deleted** from Windows (the shell cannot remove them due to file locking):
-
-```
-.replit
-.replitignore
-replit.md
-.npmrc
-api-portal.tar.gz
-api-portal-db.sql
-artifacts/api-docs/.replit-artifact/
-artifacts/api-server/.replit-artifact/
-artifacts/mockup-sandbox/     (entire directory)
-scripts/post-merge.sh
-pnpm-workspace.yaml
-pnpm-lock.yaml
-tsconfig.base.json
-tsconfig.json                 (root)
-package.json                  (root workspace)
-node_modules/                 (root)
-```
 
 ## Troubleshooting
 
