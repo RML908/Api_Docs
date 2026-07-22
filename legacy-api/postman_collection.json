@@ -50,6 +50,7 @@
             { "key": "note", "value": "" },
             { "key": "have_a_referral", "value": "0" },
             { "key": "payment_type_id", "value": "3" },
+            { "key": "branch_office_id", "value": "1" },
             { "key": "services", "value": "[]" }
           ]
         }
@@ -116,6 +117,14 @@
             { "key": "doctor_ssn", "value": "0001" }
           ]
         }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Branch List",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/get_branch"
       },
       "response": []
     }

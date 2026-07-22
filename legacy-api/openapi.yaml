@@ -83,6 +83,10 @@ paths:
                 payment_type_id:
                   type: string
                   example: "3"
+                branch_office_id:
+                  type: string
+                  description: id from GET /get_branch; the branch name is looked up and stored automatically
+                  example: "1"
                 services:
                   type: string
                   description: JSON array of {service_id, service_name} objects
@@ -242,3 +246,34 @@ paths:
                     block_start: { type: string, example: "2026-08-01 09:00:00" }
                     block_end: { type: string, example: "2026-08-01 12:00:00" }
                     type: { type: string, enum: [block, appointment], example: "block" }
+
+  /get_branch:
+    get:
+      summary: Get Branch List
+      description: >
+        Returns the list of active hospital branches/offices. Use the returned
+        id as branch_office_id when calling POST /set_patient_schedule.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: integer, example: 1 }
+                    code: { type: integer, example: 1 }
+                    text_am: { type: string, example: "DST Բժշկական համալիր" }
+                    text_en: { type: string }
+                    text_ru: { type: string }
+                    letter: { type: string, example: "G" }
+                    address: { type: string, example: "Սաղավանյան 76" }
+                    phone: { type: string, example: "010342058" }
+                    gps_location: { type: string, example: "40.21025164520757, 44.4390024727424" }
+                    medcard: { type: integer, example: 1 }
+                    hospital_id: { type: integer, example: 0 }
+                    mail: { type: string }
+                    discount_lab: { type: number, example: 0 }
+                    discount_clinic: { type: number, example: 0 }

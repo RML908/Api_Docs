@@ -38,7 +38,9 @@ CREATE TABLE IF NOT EXISTS dst_patient_schedule (
   completed_by INT NOT NULL DEFAULT 0,
   visible TINYINT NOT NULL DEFAULT 1,
   queue_confirmed_date DATETIME NULL,
-  queue_confirmed_by INT NULL
+  queue_confirmed_by INT NULL,
+  branch_office_id INT NOT NULL DEFAULT 0,
+  branch_office VARCHAR(255) NULL
 );
 
 CREATE TABLE IF NOT EXISTS dst_patient_schedule_sublist (
@@ -68,4 +70,27 @@ CREATE TABLE IF NOT EXISTS dst_hospital_users_list (
 
 INSERT INTO dst_hospital_users_list (user_ssn, name, enabled) VALUES
   ('0001', 'Dr. Test Doctor', 1);
+
+CREATE TABLE IF NOT EXISTS structure_branch_list (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code INT NULL DEFAULT 0,
+  text_am VARCHAR(50) NULL,
+  text_en VARCHAR(50) NULL,
+  text_ru VARCHAR(50) NULL,
+  letter VARCHAR(45) NULL,
+  address VARCHAR(255) NULL,
+  phone VARCHAR(45) NULL,
+  gps_location VARCHAR(45) NULL,
+  medcard INT NULL DEFAULT 1,
+  hospital_id INT NULL DEFAULT 0,
+  mail VARCHAR(45) NULL,
+  discount_lab DOUBLE NULL DEFAULT 0,
+  discount_clinic DOUBLE NULL DEFAULT 0,
+  visible INT NULL DEFAULT 1
+);
+
+INSERT INTO structure_branch_list
+  (code, text_am, letter, address, phone, gps_location, medcard, hospital_id, discount_lab, discount_clinic, visible)
+VALUES
+  (1, 'DST Բժշկական համալիր', 'G', 'Սաղավանյան 76', '010342058', '40.21025164520757, 44.4390024727424', 1, 0, 0, 0, 1);
 

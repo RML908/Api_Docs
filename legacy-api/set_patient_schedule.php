@@ -53,7 +53,7 @@ $payment_type_id = isset($_POST['payment_type_id']) ? $_POST['payment_type_id'] 
 
 	$payment_type_name = '';
 
-	$branch_office_id = '0';
+	$branch_office_id = isset($_POST['branch_office_id']) ? $_POST['branch_office_id'] : '0';
 	$branch_office = '';
 
   $visit_date_end = strtotime($visit_date . ' + ' . $visit_duration . ' minute');
@@ -107,7 +107,16 @@ if ($row = mysqli_fetch_assoc($result)) {
 	$doctor_id = '0';
 }
 
-     $Sql_Query = "INSERT INTO dst_patient_schedule(created_date, visit_date, visit_date_end, duration, type_of_visit_id, type_of_visit, visit_id, patient_ssn, patient_document, patient_name, patient_surname, patient_middlename, patient_birthday, patient_gender, patient_phone_mobile, patient_mail, complaints, insurance_id, insurance_name, insurance_policy_no, department_id, department_name, doctor_id, doctor_name, doctor_ssn, is_mobile, tele_consultation_url, note, have_a_referral, write_by, payment_type_id, payment_type_name) VALUES(NOW(), '$visit_date', '$visit_date_end', '$visit_duration', '$type_of_visit_id', '$type_of_visit', (SELECT CONCAT(date_format(NOW(),'%y'),'0', (SELECT COUNT(id) + 1 FROM dst_patient_schedule as visit_dst_patient_schedule  WHERE date_format(created_date,'%y') = date_format(NOW(),'%y'))) AS VisitNumber), '$patient_ssn', '$patient_document', '$patient_name', '$patient_surname', '$patient_middlename', '$patient_birthday', '$patient_gender', '$patient_phone_mobile', '', '$complaints', '$insurance_id', '$insurance_name', '$insurance_policy_no', '$department_id', '$department_name', '$doctor_id', '$doctor_name', '$doctor_ssn', '1', '$JitsiURL', '$note', '$have_a_referral', '0', '$payment_type_id', '$payment_type_name')";
+$branch_office_query = "SELECT text_am as branch_office FROM structure_branch_list WHERE id = '$branch_office_id' AND visible = 1";
+$branch_result = mysqli_query($conn, $branch_office_query);
+
+if ($branch_row = mysqli_fetch_assoc($branch_result)) {
+	$branch_office = $branch_row['branch_office'];
+} else {
+	$branch_office = '';
+}
+
+     $Sql_Query = "INSERT INTO dst_patient_schedule(created_date, visit_date, visit_date_end, duration, type_of_visit_id, type_of_visit, visit_id, patient_ssn, patient_document, patient_name, patient_surname, patient_middlename, patient_birthday, patient_gender, patient_phone_mobile, patient_mail, complaints, insurance_id, insurance_name, insurance_policy_no, department_id, department_name, doctor_id, doctor_name, doctor_ssn, is_mobile, tele_consultation_url, note, have_a_referral, write_by, payment_type_id, payment_type_name, branch_office_id, branch_office) VALUES(NOW(), '$visit_date', '$visit_date_end', '$visit_duration', '$type_of_visit_id', '$type_of_visit', (SELECT CONCAT(date_format(NOW(),'%y'),'0', (SELECT COUNT(id) + 1 FROM dst_patient_schedule as visit_dst_patient_schedule  WHERE date_format(created_date,'%y') = date_format(NOW(),'%y'))) AS VisitNumber), '$patient_ssn', '$patient_document', '$patient_name', '$patient_surname', '$patient_middlename', '$patient_birthday', '$patient_gender', '$patient_phone_mobile', '', '$complaints', '$insurance_id', '$insurance_name', '$insurance_policy_no', '$department_id', '$department_name', '$doctor_id', '$doctor_name', '$doctor_ssn', '1', '$JitsiURL', '$note', '$have_a_referral', '0', '$payment_type_id', '$payment_type_name', '$branch_office_id', '$branch_office')";
 
  	$dst_patient_schedule = array();
 	header('Content-type: application/json');
