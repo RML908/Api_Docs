@@ -191,3 +191,28 @@ INSERT INTO structure_branch_list
 VALUES
   (1, 'DST Բժշկական համալիր', 'G', 'Սաղավանյան 76', '010342058', '40.21025164520757, 44.4390024727424', 1, 0, 0, 0, 1);
 
+CREATE TABLE IF NOT EXISTS structure_department_list (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  global_service_code VARCHAR(50) NULL,
+  global_service VARCHAR(255) NULL,
+  department_id INT NULL DEFAULT 0,
+  department_name_am VARCHAR(255) NULL,
+  department_name_en VARCHAR(255) NULL,
+  department_name_ru VARCHAR(255) NULL,
+  department_specialization_id INT NULL DEFAULT 0,
+  department_specialization VARCHAR(255) NULL,
+  is_tool TINYINT NULL DEFAULT 0,
+  branch_id INT NULL DEFAULT 0,
+  branch_name VARCHAR(255) NULL,
+  queuing TINYINT NULL DEFAULT 0,
+  location VARCHAR(255) NULL,
+  registration_location VARCHAR(255) NULL,
+  medcard INT NULL DEFAULT 1,
+  visible INT NULL DEFAULT 1
+);
+
+INSERT INTO structure_department_list
+  (global_service_code, global_service, department_id, department_name_am, department_name_en, department_name_ru, department_specialization_id, department_specialization, is_tool, branch_id, branch_name, queuing, location, registration_location, medcard, visible)
+VALUES
+  ('GS001', 'General Medicine', 1, 'Ընդհանուր բժշկություն', 'General Medicine', '', 1, 'General Practice', 0, 1, 'DST Բժշկական համալիր', 1, 'Floor 1', 'Reception Desk 1', 1, 1);
+

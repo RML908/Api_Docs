@@ -157,6 +157,14 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Get Hospital Departments",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/get_hospital_departments"
+      },
+      "response": []
     }
   ]
 }

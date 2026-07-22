@@ -357,3 +357,35 @@ paths:
                     service_local_id: { type: string, example: "S001" }
                     service_name: { type: string, example: "General Consultation" }
                     service_price: { type: number, example: 5000 }
+
+  /get_hospital_departments:
+    get:
+      summary: Get Hospital Departments
+      description: >
+        Returns visible departments/specializations available for the
+        medcard system (visible = 1, medcard = 1).
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: integer, example: 1 }
+                    global_service_code: { type: string, example: "GS001" }
+                    global_service: { type: string, example: "General Medicine" }
+                    department_id: { type: integer, example: 1 }
+                    department_name_am: { type: string }
+                    department_name_en: { type: string, example: "General Medicine" }
+                    department_name_ru: { type: string }
+                    department_specialization_id: { type: integer, example: 1 }
+                    department_specialization: { type: string, example: "General Practice" }
+                    is_tool: { type: integer, example: 0 }
+                    branch_id: { type: integer, example: 1 }
+                    branch_name: { type: string, example: "DST Բժշկական համալիր" }
+                    queuing: { type: integer, example: 1 }
+                    location: { type: string, example: "Floor 1" }
+                    registration_location: { type: string, example: "Reception Desk 1" }
