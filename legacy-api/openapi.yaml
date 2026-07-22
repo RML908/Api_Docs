@@ -251,8 +251,15 @@ paths:
     get:
       summary: Get Branch List
       description: >
-        Returns the list of active hospital branches/offices. Use the returned
-        id as branch_office_id when calling POST /set_patient_schedule.
+        Returns active hospital branches/offices. Omit id to get the full
+        list, or pass it to fetch a single branch. Use the returned id as
+        branch_office_id when calling POST /set_patient_schedule.
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema: { type: integer, example: 1 }
+          description: Optional — filters to a single branch
       responses:
         "200":
           description: OK

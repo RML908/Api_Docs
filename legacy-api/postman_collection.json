@@ -124,7 +124,14 @@
       "name": "Get Branch List",
       "request": {
         "method": "GET",
-        "url": "{{baseUrl}}/get_branch"
+        "url": {
+          "raw": "{{baseUrl}}/get_branch?id=1",
+          "host": ["{{baseUrl}}"],
+          "path": ["get_branch"],
+          "query": [
+            { "key": "id", "value": "1", "description": "Optional — omit to get all branches" }
+          ]
+        }
       },
       "response": []
     }

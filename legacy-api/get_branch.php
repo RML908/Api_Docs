@@ -16,6 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
   		exit();
     }
 
+  $branch_id = isset($_GET['id']) ? $_GET['id'] : '';
+
 function getConnection() {
     $dbConfig = include('config.php');
 
@@ -50,7 +52,12 @@ function getConnection() {
 
     $conn = getConnection();
 
-	$stmt = $conn->prepare("SELECT id, code, text_am, text_en, text_ru, letter, address, phone, gps_location, medcard, hospital_id, mail, discount_lab, discount_clinic FROM structure_branch_list WHERE visible = 1");
+	if ($branch_id !== '') {
+		$stmt = $conn->prepare("SELECT id, code, text_am, text_en, text_ru, letter, address, phone, gps_location, medcard, hospital_id, mail, discount_lab, discount_clinic FROM structure_branch_list WHERE visible = 1 AND id = ?");
+		$stmt->bind_param("i", $branch_id);
+	} else {
+		$stmt = $conn->prepare("SELECT id, code, text_am, text_en, text_ru, letter, address, phone, gps_location, medcard, hospital_id, mail, discount_lab, discount_clinic FROM structure_branch_list WHERE visible = 1");
+	}
 	$stmt->execute();
 	$stmt->bind_result($id, $code, $text_am, $text_en, $text_ru, $letter, $address, $phone, $gps_location, $medcard, $hospital_id, $mail, $discount_lab, $discount_clinic);
 
