@@ -143,6 +143,8 @@ if (is_array($ServiceList_array) && !empty($ServiceList_array)) {
 		$temp['status'] = '1';
 		$temp['message'] = 'Registration Successfully';
 		$temp['row_id'] = $last_id;
+		$temp['branch_office_id'] = $branch_office_id;
+		$temp['branch_office'] = $branch_office;
 		array_push($dst_patient_schedule, $temp);
 		echo json_encode($dst_patient_schedule,JSON_UNESCAPED_UNICODE);
 	}

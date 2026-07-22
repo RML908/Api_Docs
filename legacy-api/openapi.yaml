@@ -104,6 +104,8 @@ paths:
                     status: { type: string, example: "1" }
                     message: { type: string, example: "Registration Successfully" }
                     row_id: { type: integer, example: 1 }
+                    branch_office_id: { type: string, example: "1" }
+                    branch_office: { type: string, example: "DST Բժշկական համալիր" }
         "403":
           description: Validation failure or DB error
 
