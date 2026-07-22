@@ -286,3 +286,74 @@ paths:
                     mail: { type: string }
                     discount_lab: { type: number, example: 0 }
                     discount_clinic: { type: number, example: 0 }
+
+  /get_hospital_doctors:
+    get:
+      summary: Get Hospital Doctors
+      description: >
+        Returns doctors available for mobile booking (access_of_mobile = 1,
+        enabled = 1), including their default consultation/telemed service
+        prices resolved via structure_hospital_services.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: integer, example: 1 }
+                    user_id: { type: string, example: "1" }
+                    user_document: { type: string }
+                    user_ssn: { type: string, example: "0001" }
+                    user_name: { type: string, example: "Test" }
+                    user_surname: { type: string, example: "Doctor" }
+                    user_middlename: { type: string }
+                    user_birthday: { type: string, example: "1980-01-01 00:00:00" }
+                    user_gender: { type: string, example: "M" }
+                    user_phone: { type: string, example: "+37499000000" }
+                    user_mail: { type: string, example: "doctor@example.com" }
+                    department_name_id: { type: integer, example: 1 }
+                    department_name: { type: string, example: "General" }
+                    cabinet: { type: string, example: "101" }
+                    profession_id: { type: integer, example: 1 }
+                    profession: { type: string, example: "General Practitioner" }
+                    position: { type: string, example: "Doctor" }
+                    academic_degree: { type: string, example: "MD" }
+                    rating: { type: integer, example: 0 }
+                    rating_dislike: { type: integer, example: 0 }
+                    branch_id: { type: integer, example: 1 }
+                    branch_office: { type: string, example: "DST Բժշկական համալիր" }
+                    defoult_cons_price: { type: number, example: 5000 }
+                    defoult_telemed_cons_price: { type: number, example: 4000 }
+                    teleconsultation_enabled: { type: integer, example: 1 }
+                    about_us: { type: string }
+                    user_image: { type: string, description: "base64-encoded image, empty string if none" }
+
+  /get_hospital_services:
+    get:
+      summary: Get Hospital Services
+      description: Returns active/enabled hospital services, optionally filtered by department.
+      parameters:
+        - name: department_id
+          in: query
+          required: false
+          schema: { type: integer, example: 1 }
+          description: Optional — filters to a single department's services
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: integer, example: 1 }
+                    department_id: { type: integer, example: 1 }
+                    service_local_id: { type: string, example: "S001" }
+                    service_name: { type: string, example: "General Consultation" }
+                    service_price: { type: number, example: 5000 }

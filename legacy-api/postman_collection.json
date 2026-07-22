@@ -134,6 +134,29 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Get Hospital Doctors",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/get_hospital_doctors"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Hospital Services",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/get_hospital_services?department_id=1",
+          "host": ["{{baseUrl}}"],
+          "path": ["get_hospital_services"],
+          "query": [
+            { "key": "department_id", "value": "1", "description": "Optional — omit to get all services" }
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }
