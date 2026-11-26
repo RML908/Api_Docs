@@ -6,4 +6,6 @@ COPY apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY php.ini /usr/local/etc/php/conf.d/zz-custom.ini
 COPY . /var/www/html/
 
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html && chmod +x /var/www/html/entrypoint.sh
+
+CMD ["/var/www/html/entrypoint.sh"]
