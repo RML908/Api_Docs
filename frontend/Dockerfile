@@ -15,8 +15,11 @@ FROM nginx:1.27-alpine AS production
 # Remove default nginx config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy custom config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Config template: official nginx image renders it with env vars at start
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+ENV PORT=80 \
+    BACKEND_URL=http://backend:8080 \
+    LEGACY_API_URL=http://legacy-api:80/
 
 # Copy built assets
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -24,6 +27,6 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD wget -qO- http://localhost:80/ || exit 1
+  CMD wget -qO- http://localhost:${PORT}/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
