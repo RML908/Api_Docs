@@ -17,7 +17,9 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 # Config template: official nginx image renders it with env vars at start
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
-ENV PORT=80 \
+# Makes the image's entrypoint export NGINX_LOCAL_RESOLVERS (nameservers from /etc/resolv.conf)
+ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1 \
+    PORT=80 \
     BACKEND_URL=http://backend:8080 \
     LEGACY_API_URL=http://legacy-api:80/
 
