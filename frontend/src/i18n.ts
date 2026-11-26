@@ -24,6 +24,10 @@ const dict = {
     changelogSub: 'API updates and version history',
     noChangelog: 'No changelog entries yet',
     language: 'Language',
+    all: 'All',
+    required: 'Required',
+    optional: 'Optional',
+    fields: 'fields',
   },
   hy: {
     documentation: 'Փաստաթղթեր',
@@ -43,6 +47,10 @@ const dict = {
     changelogSub: 'API-ի թարմացումներ և տարբերակների պատմություն',
     noChangelog: 'Փոփոխությունների գրառումներ դեռ չկան',
     language: 'Լեզու',
+    all: 'Բոլորը',
+    required: 'Պարտադիր',
+    optional: 'Ոչ պարտադիր',
+    fields: 'դաշտ',
   },
 } as const;
 

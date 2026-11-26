@@ -33,6 +33,7 @@ export default function PublicDocs() {
   const matchesQuery = (ep: Endpoint, q: string) =>
     ep.path.toLowerCase().includes(q) ||
     ep.summary.toLowerCase().includes(q) ||
+    (ep.summaryHy?.toLowerCase().includes(q) ?? false) ||
     ep.method.toLowerCase().includes(q) ||
     (ep.description?.toLowerCase().includes(q) ?? false);
 
@@ -103,8 +104,8 @@ export default function PublicDocs() {
         {/* Sidebar */}
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-40 w-72 transform overflow-y-auto border-r border-gray-200 bg-white transition-transform duration-200 ease-in-out',
-            'lg:static lg:z-auto lg:translate-x-0',
+            'fixed inset-y-0 left-0 z-40 w-80 max-w-[88vw] transform overflow-y-auto border-r border-gray-200 bg-white transition-transform duration-200 ease-in-out',
+            'lg:static lg:z-auto lg:w-80 lg:max-w-none lg:shrink-0 lg:translate-x-0 xl:w-96',
             sidebarOpen ? 'translate-x-0' : '-translate-x-full',
           )}
         >
@@ -147,12 +148,15 @@ export default function PublicDocs() {
                           key={ep.id}
                           onClick={() => selectEndpoint(ep.id)}
                           className={cn(
-                            'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm',
+                            'flex w-full items-start gap-2 rounded-lg px-2 py-2 text-left text-sm',
                             selectedId === ep.id ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50',
                           )}
                         >
-                          <MethodBadge method={ep.method} />
-                          <span className="truncate font-mono text-xs">{ep.path}</span>
+                          <span className="mt-0.5 shrink-0"><MethodBadge method={ep.method} /></span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block break-words text-[13px] font-medium leading-snug">{pick(ep.summary, ep.summaryHy)}</span>
+                            <span className="mt-0.5 block break-all font-mono text-[11px] leading-snug text-gray-400">{ep.path}</span>
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -188,7 +192,7 @@ export default function PublicDocs() {
               {getRequestBody(selected) !== null ? (
                 <section className="mt-8">
                   <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">{t('requestBody')}</h2>
-                  <JsonSchemaTable data={getRequestBody(selected)} />
+                  <JsonSchemaTable data={getRequestBody(selected)} filterable />
                 </section>
               ) : selected.params ? (
                 <section className="mt-8">
