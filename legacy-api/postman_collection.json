@@ -15,7 +15,10 @@
     ]
   },
   "variable": [
-    { "key": "baseUrl", "value": "https://dstapidocs.space/legacy-api" }
+    {
+      "key": "baseUrl",
+      "value": "https://dstapidocs.space/legacy-api"
+    }
   ],
   "item": [
     {
@@ -26,32 +29,110 @@
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
-            { "key": "visit_date", "value": "2026-07-01 10:00:00" },
-            { "key": "visit_duration", "value": "30" },
-            { "key": "type_of_visit_id", "value": "1" },
-            { "key": "type_of_visit", "value": "Consultation" },
-            { "key": "patient_ssn", "value": "1234567890" },
-            { "key": "patient_document", "value": "" },
-            { "key": "patient_name", "value": "Test" },
-            { "key": "patient_surname", "value": "Patient" },
-            { "key": "patient_middlename", "value": "" },
-            { "key": "patient_birthday", "value": "1990-01-01" },
-            { "key": "patient_gender", "value": "M" },
-            { "key": "patient_phone_mobile", "value": "+37499000000" },
-            { "key": "patient_mail", "value": "" },
-            { "key": "complaints", "value": "" },
-            { "key": "insurance_id", "value": "0" },
-            { "key": "insurance_name", "value": "" },
-            { "key": "insurance_policy_no", "value": "" },
-            { "key": "department_id", "value": "1" },
-            { "key": "department_name", "value": "General" },
-            { "key": "doctor_ssn", "value": "0001" },
-            { "key": "doctor_name", "value": "" },
-            { "key": "note", "value": "" },
-            { "key": "have_a_referral", "value": "0" },
-            { "key": "payment_type_id", "value": "3" },
-            { "key": "branch_office_id", "value": "1" },
-            { "key": "services", "value": "[]" }
+            {
+              "key": "visit_date",
+              "value": "2026-07-01 10:00:00"
+            },
+            {
+              "key": "visit_duration",
+              "value": "30"
+            },
+            {
+              "key": "type_of_visit_id",
+              "value": "1"
+            },
+            {
+              "key": "type_of_visit",
+              "value": "Consultation"
+            },
+            {
+              "key": "patient_ssn",
+              "value": "1234567890"
+            },
+            {
+              "key": "patient_document",
+              "value": ""
+            },
+            {
+              "key": "patient_name",
+              "value": "Test"
+            },
+            {
+              "key": "patient_surname",
+              "value": "Patient"
+            },
+            {
+              "key": "patient_middlename",
+              "value": ""
+            },
+            {
+              "key": "patient_birthday",
+              "value": "1990-01-01"
+            },
+            {
+              "key": "patient_gender",
+              "value": "M"
+            },
+            {
+              "key": "patient_phone_mobile",
+              "value": "+37499000000"
+            },
+            {
+              "key": "patient_mail",
+              "value": ""
+            },
+            {
+              "key": "complaints",
+              "value": ""
+            },
+            {
+              "key": "insurance_id",
+              "value": "0"
+            },
+            {
+              "key": "insurance_name",
+              "value": ""
+            },
+            {
+              "key": "insurance_policy_no",
+              "value": ""
+            },
+            {
+              "key": "department_id",
+              "value": "1"
+            },
+            {
+              "key": "department_name",
+              "value": "General"
+            },
+            {
+              "key": "doctor_ssn",
+              "value": "0001"
+            },
+            {
+              "key": "doctor_name",
+              "value": ""
+            },
+            {
+              "key": "note",
+              "value": ""
+            },
+            {
+              "key": "have_a_referral",
+              "value": "0"
+            },
+            {
+              "key": "payment_type_id",
+              "value": "3"
+            },
+            {
+              "key": "branch_office_id",
+              "value": "1"
+            },
+            {
+              "key": "services",
+              "value": "[]"
+            }
           ]
         }
       },
@@ -65,8 +146,14 @@
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
-            { "key": "schedule_id", "value": "1" },
-            { "key": "visit_date", "value": "2026-07-02 11:00:00" }
+            {
+              "key": "schedule_id",
+              "value": "1"
+            },
+            {
+              "key": "visit_date",
+              "value": "2026-07-02 11:00:00"
+            }
           ]
         }
       },
@@ -80,9 +167,18 @@
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
-            { "key": "schedule_id", "value": "1" },
-            { "key": "cancelled_by", "value": "1" },
-            { "key": "cancelled_date", "value": "2026-07-01 09:00:00" }
+            {
+              "key": "schedule_id",
+              "value": "1"
+            },
+            {
+              "key": "cancelled_by",
+              "value": "1"
+            },
+            {
+              "key": "cancelled_date",
+              "value": "2026-07-01 09:00:00"
+            }
           ]
         }
       },
@@ -96,10 +192,22 @@
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
-            { "key": "doctor_ssn", "value": "0001" },
-            { "key": "block_start", "value": "2026-08-01 09:00:00" },
-            { "key": "block_end", "value": "2026-08-01 12:00:00" },
-            { "key": "note", "value": "Vacation" }
+            {
+              "key": "doctor_ssn",
+              "value": "0001"
+            },
+            {
+              "key": "block_start",
+              "value": "2026-08-01 09:00:00"
+            },
+            {
+              "key": "block_end",
+              "value": "2026-08-01 12:00:00"
+            },
+            {
+              "key": "note",
+              "value": "Vacation"
+            }
           ]
         }
       },
@@ -111,10 +219,17 @@
         "method": "GET",
         "url": {
           "raw": "{{baseUrl}}/get_doctor_block_time?doctor_ssn=0001",
-          "host": ["{{baseUrl}}"],
-          "path": ["get_doctor_block_time"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "get_doctor_block_time"
+          ],
           "query": [
-            { "key": "doctor_ssn", "value": "0001" }
+            {
+              "key": "doctor_ssn",
+              "value": "0001"
+            }
           ]
         }
       },
@@ -126,10 +241,18 @@
         "method": "GET",
         "url": {
           "raw": "{{baseUrl}}/get_branch?id=1",
-          "host": ["{{baseUrl}}"],
-          "path": ["get_branch"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "get_branch"
+          ],
           "query": [
-            { "key": "id", "value": "1", "description": "Optional — omit to get all branches" }
+            {
+              "key": "id",
+              "value": "1",
+              "description": "Optional — omit to get all branches"
+            }
           ]
         }
       },
@@ -149,10 +272,18 @@
         "method": "GET",
         "url": {
           "raw": "{{baseUrl}}/get_hospital_services?department_id=1",
-          "host": ["{{baseUrl}}"],
-          "path": ["get_hospital_services"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "get_hospital_services"
+          ],
           "query": [
-            { "key": "department_id", "value": "1", "description": "Optional — omit to get all services" }
+            {
+              "key": "department_id",
+              "value": "1",
+              "description": "Optional — omit to get all services"
+            }
           ]
         }
       },
@@ -163,6 +294,28 @@
       "request": {
         "method": "GET",
         "url": "{{baseUrl}}/get_hospital_departments"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Doctor Work Time",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/get_hospital_doctor_work_time?doctor_ssn=0001",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "get_hospital_doctor_work_time"
+          ],
+          "query": [
+            {
+              "key": "doctor_ssn",
+              "value": "0001"
+            }
+          ]
+        }
       },
       "response": []
     }
