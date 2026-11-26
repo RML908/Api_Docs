@@ -22,7 +22,8 @@ $conn = @new mysqli(
     $dbConfig['host'],
     $dbConfig['username'],
     $dbConfig['password'],
-    $dbConfig['database']
+    $dbConfig['database'],
+        $dbConfig['port']
 );
 
 if ($conn->connect_error) {

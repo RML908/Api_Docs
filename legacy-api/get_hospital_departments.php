@@ -23,7 +23,8 @@ function getConnection() {
         $dbConfig['host'],
         $dbConfig['username'],
         $dbConfig['password'],
-        $dbConfig['database']
+        $dbConfig['database'],
+        $dbConfig['port']
     );
 
 
