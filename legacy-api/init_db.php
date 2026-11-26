@@ -17,7 +17,9 @@ function run_sql($db, $file) {
     if ($db->multi_query(file_get_contents($file))) { do { if ($res = $db->store_result()) $res->free(); } while ($db->more_results() && $db->next_result()); }
     return $db->errno ? "error {$db->error}" : "ok";
 }
-if (!($r && $r->num_rows > 0)) { echo "init_db: base schema + test data: " . run_sql($db, __DIR__ . '/schema.sql') . "\n"; }
+// One-time reset: set LEGACY_RESET_DB=1 on the service, deploy once, then remove the variable.
+if (getenv('LEGACY_RESET_DB') === '1') { echo "init_db: RESET real structure + sample data: " . run_sql($db, __DIR__ . '/reset_real_structure.sql') . "\n"; }
+elseif (!($r && $r->num_rows > 0)) { echo "init_db: base schema + test data: " . run_sql($db, __DIR__ . '/schema.sql') . "\n"; }
 else { echo "init_db: base schema already present\n"; }
 // Idempotent migrations (CREATE TABLE IF NOT EXISTS + guarded inserts), safe on every start
 foreach (glob(__DIR__ . '/migrations/*.sql') as $m) { echo "init_db: " . basename($m) . ": " . run_sql($db, $m) . "\n"; }
