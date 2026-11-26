@@ -3,9 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 export function PublicNavbar() {
   const { isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -21,28 +24,29 @@ export function PublicNavbar() {
           </NavLink>
           <nav className="hidden items-center gap-4 sm:flex">
             <NavLink to="/" end className={navLinkClass}>
-              Documentation
+              {t('documentation')}
             </NavLink>
             <NavLink to="/changelog" className={navLinkClass}>
-              Changelog
+              {t('changelog')}
             </NavLink>
           </nav>
         </div>
         <div className="flex items-center gap-2">
+          <LanguageSwitcher />
           <div className="hidden sm:block">
             {isAuthenticated ? (
               <NavLink
                 to="/admin"
                 className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
               >
-                Admin
+                {t('admin')}
               </NavLink>
             ) : (
               <NavLink
                 to="/login"
                 className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
-                Sign In
+                {t('signIn')}
               </NavLink>
             )}
           </div>
@@ -59,10 +63,10 @@ export function PublicNavbar() {
       {menuOpen && (
         <nav className="flex flex-col gap-1 border-t border-gray-100 px-4 py-3 sm:hidden">
           <NavLink to="/" end className={navLinkClass} onClick={() => setMenuOpen(false)}>
-            Documentation
+            {t('documentation')}
           </NavLink>
           <NavLink to="/changelog" className={navLinkClass} onClick={() => setMenuOpen(false)}>
-            Changelog
+            {t('changelog')}
           </NavLink>
           {isAuthenticated ? (
             <NavLink
@@ -70,7 +74,7 @@ export function PublicNavbar() {
               className="mt-2 rounded-md bg-blue-600 px-3 py-1.5 text-center text-sm font-medium text-white hover:bg-blue-700"
               onClick={() => setMenuOpen(false)}
             >
-              Admin
+              {t('admin')}
             </NavLink>
           ) : (
             <NavLink
@@ -78,7 +82,7 @@ export function PublicNavbar() {
               className="mt-2 rounded-md border border-gray-300 px-3 py-1.5 text-center text-sm font-medium text-gray-700 hover:bg-gray-50"
               onClick={() => setMenuOpen(false)}
             >
-              Sign In
+              {t('signIn')}
             </NavLink>
           )}
         </nav>

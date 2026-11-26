@@ -7,6 +7,8 @@ export interface CreateEndpointPayload {
   path: string;
   summary: string;
   description?: string;
+  summaryHy?: string;
+  descriptionHy?: string;
   status?: EndpointStatus;
   version?: string;
   params?: string;
