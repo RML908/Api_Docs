@@ -70,6 +70,19 @@ function getConnection() {
 
     $conn = getConnection();
 
+  // doctor_id is optional: look it up by SSN (same as set_patient_schedule), else 0.
+  $doctor_id = (int)$doctor_id;
+  if ($doctor_id === 0) {
+    $lk = $conn->prepare("SELECT user_id FROM dst_hospital_users_list WHERE user_ssn = ? AND enabled = 1 LIMIT 1");
+    if ($lk) {
+      $lk->bind_param('s', $doctor_ssn);
+      $lk->execute();
+      $lk->bind_result($found_id);
+      if ($lk->fetch()) { $doctor_id = (int)$found_id; }
+      $lk->close();
+    }
+  }
+
   $Sql_Query = "INSERT INTO dst_doctors_blocked_time(created_date, doctor_id, doctor_ssn, block_start, block_end, note) VALUES(NOW(), '$doctor_id', '$doctor_ssn', '$block_start', '$block_end', '$note')";
 
 
