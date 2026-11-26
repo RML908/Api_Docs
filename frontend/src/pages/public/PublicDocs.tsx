@@ -9,8 +9,10 @@ import { getRequestBody, getResponseBody } from '@/utils/codeSamples';
 import { Search, Menu, Code2, X } from 'lucide-react';
 import type { Endpoint, EndpointStatus } from '@/types';
 import { cn } from '@/utils/cn';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function PublicDocs() {
+  const { t, pick } = useLanguage();
   const { data: groups = [], isLoading: groupsLoading } = useGroups();
   const { data: endpoints = [], isLoading: endpointsLoading } = useEndpoints({ status: 'published' });
   const [search, setSearch] = useState('');
@@ -107,7 +109,7 @@ export default function PublicDocs() {
           )}
         >
           <div className="flex items-center justify-between border-b border-gray-100 p-3 lg:hidden">
-            <span className="text-sm font-semibold text-gray-700">Endpoints</span>
+            <span className="text-sm font-semibold text-gray-700">{t('endpoints')}</span>
             <button onClick={() => setSidebarOpen(false)} className="rounded p-1 text-gray-400 hover:bg-gray-100">
               <X className="h-4 w-4" />
             </button>
@@ -118,7 +120,7 @@ export default function PublicDocs() {
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search…"
+                placeholder={t('search')}
                 className="flex-1 bg-transparent text-sm outline-none"
               />
             </div>
@@ -158,7 +160,7 @@ export default function PublicDocs() {
                 );
               })}
               {filteredGroups.length === 0 && (
-                <p className="px-2 py-4 text-center text-sm text-gray-400">No endpoints found</p>
+                <p className="px-2 py-4 text-center text-sm text-gray-400">{t('noEndpoints')}</p>
               )}
             </nav>
           )}
@@ -168,7 +170,7 @@ export default function PublicDocs() {
         <main className="min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           {!selected ? (
             <div className="flex h-full items-center justify-center text-sm text-gray-400">
-              {isLoading ? 'Loading…' : 'Select an endpoint to view its documentation'}
+              {isLoading ? t('loading') : t('selectEndpoint')}
             </div>
           ) : (
             <div className="mx-auto max-w-3xl">
@@ -178,26 +180,26 @@ export default function PublicDocs() {
                 <span className="text-xs text-gray-400">{selected.version}</span>
                 <StatusBadge status={selected.status as EndpointStatus} />
               </div>
-              <h1 className="mt-2 text-xl font-bold text-gray-900 sm:text-2xl">{selected.summary}</h1>
+              <h1 className="mt-2 text-xl font-bold text-gray-900 sm:text-2xl">{pick(selected.summary, selected.summaryHy)}</h1>
               {selected.description && (
-                <p className="mt-3 text-sm leading-relaxed text-gray-600">{selected.description}</p>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600">{pick(selected.description, selected.descriptionHy)}</p>
               )}
 
               {getRequestBody(selected) !== null ? (
                 <section className="mt-8">
-                  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Request Body</h2>
+                  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">{t('requestBody')}</h2>
                   <JsonSchemaTable data={getRequestBody(selected)} />
                 </section>
               ) : selected.params ? (
                 <section className="mt-8">
-                  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">Request Format</h2>
+                  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">{t('requestFormat')}</h2>
                   <pre className="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-gray-100"><code>{selected.params}</code></pre>
                 </section>
               ) : null}
 
               <section className="mt-8">
                 <div className="mb-3 flex items-center gap-2">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Response</h2>
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500">{t('response')}</h2>
                   {selected.responseStatus && (
                     <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
                       {selected.responseStatus}
@@ -209,7 +211,7 @@ export default function PublicDocs() {
                 ) : selected.responseExample ? (
                   <pre className="overflow-x-auto rounded-lg bg-gray-900 p-3 text-xs text-gray-100"><code>{selected.responseExample}</code></pre>
                 ) : (
-                  <p className="text-sm text-gray-400">No response example provided.</p>
+                  <p className="text-sm text-gray-400">{t('noResponse')}</p>
                 )}
               </section>
             </div>
@@ -233,7 +235,7 @@ export default function PublicDocs() {
             )}
           >
             <div className="mb-3 flex items-center justify-between">
-              <span className="text-sm font-semibold text-gray-200">Code Sample</span>
+              <span className="text-sm font-semibold text-gray-200">{t('codeSample')}</span>
               <button onClick={() => setCodeOpen(false)} className="rounded p-1 text-gray-400 hover:bg-gray-800">
                 <X className="h-4 w-4" />
               </button>

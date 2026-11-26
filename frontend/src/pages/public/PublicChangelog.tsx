@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { changelogsApi } from '@/api/changelogs';
 import { format } from 'date-fns';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function PublicChangelog() {
+  const { t } = useLanguage();
   const { data: logs = [], isLoading } = useQuery({
     queryKey: ['changelogs'],
     queryFn: async () => { const r = await changelogsApi.list(); return r.data.data; },
@@ -11,8 +13,8 @@ export default function PublicChangelog() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Changelog</h1>
-        <p className="mt-2 text-gray-500">API updates and version history</p>
+        <h1 className="text-3xl font-bold text-gray-900">{t('changelog')}</h1>
+        <p className="mt-2 text-gray-500">{t('changelogSub')}</p>
       </div>
 
       {isLoading ? (
@@ -39,7 +41,7 @@ export default function PublicChangelog() {
               </div>
             </div>
           ))}
-          {logs.length === 0 && <p className="text-center text-sm text-gray-400 py-8">No changelog entries yet</p>}
+          {logs.length === 0 && <p className="text-center text-sm text-gray-400 py-8">{t('noChangelog')}</p>}
         </div>
       )}
     </div>

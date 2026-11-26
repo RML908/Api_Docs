@@ -16,6 +16,8 @@ const emptyForm: CreateEndpointPayload = {
   path: '',
   summary: '',
   description: '',
+  summaryHy: '',
+  descriptionHy: '',
   status: 'draft',
   version: 'v1',
   params: '',
@@ -58,6 +60,8 @@ export default function AdminEndpoints() {
       path: ep.path,
       summary: ep.summary,
       description: ep.description ?? '',
+      summaryHy: ep.summaryHy ?? '',
+      descriptionHy: ep.descriptionHy ?? '',
       status: ep.status,
       version: ep.version,
       params: ep.params ?? '',
@@ -163,6 +167,28 @@ export default function AdminEndpoints() {
               rows={2}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
             />
+          </div>
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-600">Summary (Հայերեն)</label>
+              <input
+                value={form.summaryHy}
+                onChange={(e) => set('summaryHy', e.target.value)}
+                placeholder="Համառոտ նկարագրություն"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-600">Description (Հայերեն)</label>
+              <textarea
+                value={form.descriptionHy}
+                onChange={(e) => set('descriptionHy', e.target.value)}
+                placeholder="Ի՞նչ է անում այս endpoint-ը"
+                rows={2}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+              />
+            </div>
           </div>
 
           <div className="mt-3 grid gap-3 sm:grid-cols-2">

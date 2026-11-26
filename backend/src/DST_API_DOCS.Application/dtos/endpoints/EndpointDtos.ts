@@ -8,6 +8,8 @@ export const CreateEndpointSchema = z.object({
   path: z.string().min(1, 'Path is required').max(500),
   summary: z.string().min(1, 'Summary is required').max(200),
   description: z.string().max(2000).optional(),
+  summaryHy: z.string().max(200).optional(),
+  descriptionHy: z.string().max(2000).optional(),
   status: z.nativeEnum(EndpointStatus).default(EndpointStatus.DRAFT),
   version: z.string().default('v1'),
   params: z.string().optional(),
@@ -37,6 +39,8 @@ export interface EndpointResponseDto {
   path: string;
   summary: string;
   description: string | null;
+  summaryHy: string | null;
+  descriptionHy: string | null;
   status: string;
   version: string;
   params: string | null;

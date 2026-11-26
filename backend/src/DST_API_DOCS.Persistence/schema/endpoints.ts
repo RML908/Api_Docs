@@ -13,6 +13,8 @@ export const endpointsTable = pgTable(
     path: text('path').notNull(),
     summary: text('summary').notNull(),
     description: text('description'),
+    summaryHy: text('summary_hy'),
+    descriptionHy: text('description_hy'),
     status: text('status').notNull().default('draft'),
     version: text('version').notNull().default('v1'),
     params: text('params'),

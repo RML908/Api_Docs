@@ -8,6 +8,8 @@ export interface Endpoint extends BaseEntity, SoftDeletable, Auditable {
   path: string;
   summary: string;
   description: string | null;
+  summaryHy: string | null;
+  descriptionHy: string | null;
   status: EndpointStatus;
   version: string;
   params: string | null;
